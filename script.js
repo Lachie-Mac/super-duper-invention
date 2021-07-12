@@ -37,7 +37,7 @@ class Rule
     constructor()
     {
         this.blockedWords = blockedWords;
-        this.substitute = substitute;
+        this.substituteWords = substituteWords;
         this.caseSensitive = caseSensitive;
         this.blocking = blocking;
     }
