@@ -30,12 +30,8 @@
     },
     "page_action": 
     {
-        "default_popup": "page.html",
-        "default_icon": {"16": "images/bookmarksbar.png"}
-    },
-    "page_action": {
+        "default_icon": {"16": "images/bookmarksbar.png"},
         "default_title": "UnDuck",
         "default_popup": "Testing/test.html"
-      }
     }
 }
