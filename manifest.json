@@ -1,27 +1,41 @@
 {
     "manifest_version": 3,
     "name": "UNDUCK",
-    "version": "0.1",
     "description": "text filter boi",
-    "action": 
-        {
-            "default_popup": "page.html",
-            "default_icon": "images/bookmarksbar.png"
-        },
-    "icons": 
-        {
-            "16":"images/icon16.png",
-            "48":"images/icon48.png",
-            "128":"images/icon128.png"
-        },
+    "version": "0.1",
+    "author": "UNDUCK CORP",
+    "background":
+    {
+        "scripts":["Testing/test.js"],
+        "persistent": false
+    },
+    "permissions":
+    [
+        "activeTab",
+        "declarativeContent",
+        "storage"
+    ],
     "content_scripts":
     [
         {   
             "matches": ["<all_urls>"],
-            "js": ["script.js"]
+            "js": ["Testing/test.js"]
         }
     ],
-    "permissions":["storage"],
-    "commands":{},
-    "":""
+    "icons": 
+    {
+        "16":"images/icon16.png",
+        "48":"images/icon48.png",
+        "128":"images/icon128.png"
+    },
+    "page_action": 
+    {
+        "default_popup": "page.html",
+        "default_icon": {"16": "images/bookmarksbar.png"}
+    },
+    "page_action": {
+        "default_title": "UnDuck",
+        "default_popup": "Testing/test.html"
+      }
+    }
 }
