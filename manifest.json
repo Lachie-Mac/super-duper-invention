@@ -1,14 +1,18 @@
 {
-    "manifest_version": 1,
+    "manifest_version": 3,
     "name": "UNDUCK",
     "version": "0.1",
     "description": "text filter boi",
-    "action": "images/bookmarksbar.png",
+    "action": 
+        {
+            "default_popup": "page.html",
+            "default_icon": "images/bookmarksbar.png"
+        },
     "icons": 
         {
             "16":"images/icon16.png",
             "48":"images/icon48.png",
-        "128":"images/icon128.png"
+            "128":"images/icon128.png"
         },
     "content_scripts":
     [
@@ -16,5 +20,8 @@
             "matches": ["<all_urls>"],
             "js": ["script.js"]
         }
-    ]
+    ],
+    "permissions":["storage"],
+    "commands":{},
+    "":""
 }
