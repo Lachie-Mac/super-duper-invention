@@ -5,7 +5,7 @@
     "description": "text filter boi",
     "action": 
         {
-            "default_popup": "page.html",
+            "default_popup": "Testing/test.html",
             "default_icon": "images/bookmarksbar.png"
         },
     "icons": 
@@ -17,11 +17,16 @@
     "content_scripts":
     [
         {   
-            "matches": ["<all_urls>"],
-            "js": ["script.js"]
+            "matches": ["<all_urls>", "*://*/*"],
+            "js": ["Testing/test.js"],
+            "all_frames": true,
+            "run_at": "document_end"
         }
     ],
     "permissions":["storage"],
     "commands":{},
-    "":""
+    "host_permissions": 
+    [
+        "*://*/*"
+    ]
 }
