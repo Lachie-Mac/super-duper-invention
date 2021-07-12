@@ -11,7 +11,7 @@ function replaceWords () {
         //for(let j=0; j<blockedWord.length; j++) {}
         if(text[i].innerHTML.includes(blockedWord)) 
         {
-            text[i].innerHTML = text[i].innerHTML.replace(blockedWord,`<b>${}</b>`);
+            text[i].innerHTML = text[i].innerHTML.replace(blockedWord,`<b>${subsituteWord}</b>`);
         }
     }
 }   
