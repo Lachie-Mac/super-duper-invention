@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 //Object Creation for storing the info
 userInfo = {
     dictionary: [],
@@ -17,7 +16,6 @@ chrome.runtime.sendMessage({
         document.querySelector("span").innerHTML = `Hello ${response.payload}`;
     }
 });
-=======
 // chrome.runtime.sendMessage({
 //     message: "get_name"
 // }, response => {
@@ -25,7 +23,6 @@ chrome.runtime.sendMessage({
 //         document.querySelector("span").innerHTML = `Hello ${response.payload}`;
 //     }
 // });
->>>>>>> f7bdc765b6d08baf691160f83c1e4a1808550f09
 
 // /*
 //     retrieve words from popup, or from storage
