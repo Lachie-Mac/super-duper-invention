@@ -136,21 +136,93 @@ document.getElementById("addRule").addEventListener("click", function() {countRu
 // listener for expanding tab 1
 let expandButton1 = document.getElementById("collapse-1-button")
 expandButton1.addEventListener("click",
-    (event) =>
+    () =>
     {
         let containerToCollapse = document.getElementById("collapse-1-div");
         if(expandButton1.innerHTML.includes("add"))
         {
-            containerToCollapse.style.maxHeight="none";
-            expandButton1.innerHTML = `<i class="material-icons">remove</i>`;
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton1.innerHTML = `<i class="material-icons">remove</i>`;   
         }
         else
         {
+            containerToCollapse.style.transition="none";
             containerToCollapse.style.maxHeight="0px";
-            expandButton1.innerHTML = `<i class="material-icons">add</i>`;
+            containerToCollapse.style.overflow="hidden";
+            expandButton1.innerHTML = `<i class="material-icons">add</i>`;  
         }
-
         return;
     }
 );
 
+// listener for expanding tab2
+let expandButton2 = document.getElementById("collapse-2-button")
+expandButton2.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-2-div");
+        if(expandButton2.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton2.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton2.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
+// listener for expanding tab3
+let expandButton3 = document.getElementById("collapse-3-button")
+expandButton3.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-3-div");
+        if(expandButton3.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton3.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton3.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
+// listener for expanding tab4
+let expandButton4 = document.getElementById("collapse-4-button")
+expandButton4.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-4-div");
+        if(expandButton4.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton4.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
