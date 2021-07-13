@@ -80,18 +80,5 @@ function getUserInfo()
     return userInfo;
 }
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "getTabId"){
-        let queryOptions = { active: true, currentWindow: true };
-        let [tab] = await chrome.tabs.query(queryOptions);
-        sendResponse({
-            message: "success",
-            payload: tab
-        });
-
-        return true;
-    }
-});
-
 //chrome.runtime.sendMessage() ; sends message to background and popup
 //chrome.tabs.sendMessage() ; sends message to foreground
