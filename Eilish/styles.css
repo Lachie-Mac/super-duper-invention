@@ -1,0 +1,183 @@
+html
+{
+    background-color: rgb(171,171,171);
+}
+
+body 
+{
+    background-color: white;
+    overflow: hidden; 
+    width: 350px; 
+    min-height: 410px; 
+    max-height: 410px;
+    height: 410px;
+    margin: 0; 
+    padding: 0; 
+}
+
+.header
+{
+    height: 12.5%;
+    background-color: #6272ff;
+    font-family: 'Zen Tokyo Zoo', cursive;
+    color: white;
+    font-size: 250%;
+    border-radius: 0 0 10px 10px;
+    margin-bottom: 5px;
+
+    display: flex;
+    padding-top: 1px;
+    justify-content: center;
+    align-items: center;
+}
+
+.save-container
+{
+    height:12%;
+    background-color: #6272ff;
+    color: white;
+    border-radius: 10px 10px 0 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.all-card-container
+{
+    height: 85%;
+    overflow-y: scroll;
+    overflow-x: auto;
+    margin-top: 5px;
+    margin-right: 5px;
+    margin-left: 5px;
+
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    -webkit-overflow-scrolling: touch;
+
+    flex: 0 0 auto;
+
+    font-family: 'Poppins', sans-serif;
+}
+
+/*removes scrollbar for Chrome, Opera & Safari*/
+::-webkit-scrollbar {
+    display:none;
+  }
+
+.card-header
+{
+    flex: 0 0 auto;
+    background-color: #ffeb3b;
+    color: black;
+    font-size: 20px;
+    border-radius: 5px 5px 0 0;
+    padding-left: 10px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    font-weight: 700;
+    height: 30px;
+    
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.card-content
+{
+    max-height: 0px;
+    overflow: hidden;
+    transition: max-height 0.5s ease-out;
+    
+    background-color: rgba(0,0,0,0.15);
+    font-size: 18px;
+
+    border-radius: 0 0 5px 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 5px;
+
+    margin-bottom: 5px;
+}
+
+.slot-joiner
+{
+    background-color: rgba(255,255,255,1);
+    border-radius: 5px 5px 5px 5px;
+}
+
+.card-slot
+{
+    background-color: rgba(255,255,255,1);
+    border-radius: 5px 5px 5px 5px;
+    padding-left: 10px;
+    padding-bottom: 5px;
+    padding-right: 10px;
+    padding-top: 5px;
+    margin-bottom: 5px;
+    font-weight: 600;
+
+    white-space: nowrap;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.mdl-switch
+{
+    margin-right: 10px;
+}
+
+.mdl-textfield
+{
+    width: 50%;
+    padding: 0 0 0 0;
+}
+
+.mdl-textfield__input
+{
+    font-family: 'Poppins', sans-serif;
+    padding: 0 0 0 0;
+    border-bottom: 1px solid #3b4fff;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.mdl-textfield__error
+{
+    margin-top: -20px;
+}
+
+.mdl-button
+{
+    flex: 0 0 auto;
+    margin-bottom: 2px;
+    margin-top: -10px;
+    text-transform: none;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.mdl-button--fab
+{
+    margin-top:0; 
+    margin-right:0;
+}
+
+br
+{
+    height: 0;
+}
+
+/* 
+    font-family: 'Poppins', sans-serif; 
+    font-family: 'Zen Tokyo Zoo', cursive;
+
+    yellow: #ffeb3b
+    blue: #3b4fff
+*/
