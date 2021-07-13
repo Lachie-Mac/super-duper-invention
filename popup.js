@@ -191,3 +191,26 @@ expandButton3.addEventListener("click",
         return;
     }
 );
+// listener for expanding tab4
+let expandButton4 = document.getElementById("collapse-4-button")
+expandButton4.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-4-div");
+        if(expandButton4.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton4.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);

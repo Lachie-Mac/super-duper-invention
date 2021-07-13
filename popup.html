@@ -14,7 +14,10 @@
         <link rel="stylesheet" href="styles.css">
     </head>
     <body>
-        <div class="header">UNDUCK</div>
+        <div class="header">
+            UNDUCK
+
+        </div>
         <div class="all-card-container">
             <div class="card-header">
                 Active Rules
@@ -124,12 +127,28 @@
             </div>
 
             <div class="card-header">
-                Parental Control
+                Appearance
                 <button id="collapse-3-button" class="mdl-button mdl-button--primary mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
                     <i class="material-icons">add</i>
                 </button>
             </div>
             <div class="card-content" id="collapse-3-div">
+                <div class="card-slot">Bolding
+                    <div>
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-5">
+                            <input type="checkbox" id="switch-5" class="mdl-switch__input">
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
+                Parental Control
+                <button id="collapse-4-button" class="mdl-button mdl-button--primary mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+                    <i class="material-icons">add</i>
+                </button>
+            </div>
+            <div class="card-content" id="collapse-4-div">
                 <div class="card-slot">Current Pin
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
@@ -146,22 +165,7 @@
                 </div>
             </div>
 
-            <div class="card-header">
-                Parental Control
-            </div>
-            <div class="card-content" style="max-height:none; overflow: none; transition: none;">
-                <div class="card-slot" style="justify-content: center;">   
-                    Parental Control is Active
-                </div>
-                <div class="card-slot" style="justify-content: space-evenly;">
-                    Enter Pin:
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
-                        <label class="mdl-textfield__label" for="sample2"></label>
-                        <span class="mdl-textfield__error">Numbers Only</span>
-                    </div>
-                </div>
-            </div>
+
 
         </div>
 
