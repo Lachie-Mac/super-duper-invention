@@ -67,17 +67,19 @@ function getPinStatus(userInfo)
 function getRedaction(userInfo)
 {
     userInfo.redactStatus = document.getElementById("redactStatus").checked;
+    console.log("Redactive status test " + userInfo.redactStatus)
 }
 //Function that counts the number of Blocked words
-function countRules(ruleCount)
+function countRules(userInfo)
 {
     //incrementing the counter
-    ruleCount++;
+    userInfo.ruleCount ++;
 }
-function decrementRules(ruleCount)
+function decrementRules(userInfo)
 {
     //decrementing the word count
-    ruleCount--;
+    userInfo.ruleCount--;
+
 }
 
 function grabDictionary(userInfo)
@@ -107,7 +109,7 @@ function grabDictionary(userInfo)
 function getActiveState(userInfo)
 {
     //Getting the user Active status
-    //userInfo.active = document.getElementById('activeState').checked;
+    userInfo.active = document.getElementById("on-off-switch").checked;
 }
 function getCaseSatus(userInfo)
 {
@@ -131,7 +133,7 @@ function getInfo(userInfo)
 //Grabbing all the information from the page
 document.getElementById("saveChanges").addEventListener("click", function() {getInfo(userInfo)} );
 //Incrementing the rule Count
-document.getElementById("addRule").addEventListener("click", function() {countRules(userInfo.ruleCount)});
+document.getElementById("addRule").addEventListener("click", function() {countRules(userInfo)});
 
 // listener for expanding tab 1
 let expandButton1 = document.getElementById("collapse-1-button")
