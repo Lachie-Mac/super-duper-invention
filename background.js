@@ -92,7 +92,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
-*/
 
 //chrome.runtime.sendMessage() ; sends message to background and popup
 //chrome.tabs.sendMessage() ; sends message to foreground
