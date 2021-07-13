@@ -15,4 +15,5 @@ function replaceWords() {
             text[i].innerHTML = text[i].innerHTML.replace(blockedWord,`<b>${substituteWord}</b>`);
         }
     }
-}   
+} 
+

@@ -1,0 +1,38 @@
+{
+    "manifest_version": 3,
+    "name": "UNDUCK",
+    "description": "text filter boi",
+    "version": "0.1",
+    "author": "UNDUCK CORP",
+    "background":
+    {
+        "service_worker":"test.js"
+    
+    
+    },
+    "permissions":
+    [
+        "activeTab",
+        "declarativeContent",
+        "storage"
+    ],
+    "content_scripts":
+    [
+        {   
+            "matches": ["<all_urls>"],
+            "js": ["test.js"]
+        }
+    ],
+    "icons": 
+    {
+        "16":"images/icon16.png",
+        "48":"images/icon48.png",
+        "128":"images/icon128.png"
+    },
+    "action": 
+    {
+        "default_icon": {"16": "images/bookmarksbar.png"},
+        "default_title": "UnDuck",
+        "default_popup": "test.html"
+    }
+}
