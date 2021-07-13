@@ -219,12 +219,12 @@ expandButton4.addEventListener("click",
 // storedValue must be boolean and RECOVERED FROM STORAGE AT STARTUP
 componentHandler.upgradeDom();
 let onOffCheckbox = document.getElementById("on-off-switch")
-let storedValueIsOff = true
-if(storedValueIsOff)
+let storedValue = true // TRUE = ON
+if(storedValue)
 {
-    onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
-    onOffCheckbox.parentElement.children[2].innerText = "OFF";
-    onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+    onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
+    onOffCheckbox.parentElement.children[2].innerText = "ON";
+    onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
 }
 onOffCheckbox.addEventListener
 ("click",
@@ -243,3 +243,157 @@ onOffCheckbox.addEventListener
         }
     }
 )    
+
+// linked PIN INPUTS
+
+    // UNLOCKED
+    let pin1Unlocked = document.getElementById("pin1Unlocked");
+    let pin2Unlocked = document.getElementById("pin2Unlocked");
+    let pin3Unlocked = document.getElementById("pin3Unlocked");
+    let pin4Unlocked = document.getElementById("pin4Unlocked");
+
+        // forward navigation
+        pin1Unlocked.addEventListener("input",()=>{
+            if(pin1Unlocked.value.length>0)
+            {
+                pin2Unlocked.focus();
+            } return;
+        });
+
+        pin2Unlocked.addEventListener("input",()=>{
+            if(pin2Unlocked.value.length>0)
+            {
+                pin3Unlocked.focus();
+            } return;
+        });
+
+        pin3Unlocked.addEventListener("input",()=>{
+            if(pin3Unlocked.value.length>0)
+            {
+                pin4Unlocked.focus();
+            } return;
+        });
+
+        pin4Unlocked.addEventListener("input",()=>{
+            if(pin4Unlocked.value.length>1)
+            {
+                pin4Unlocked.value = pin4Unlocked.value.slice(0,1);
+            } return;
+        });
+
+        // backward navigation
+        pin4Unlocked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin4Unlocked.value.length==0)
+            {
+                pin3Unlocked.focus();
+            } return;
+        })
+
+        pin3Unlocked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin3Unlocked.value.length==0)
+            {
+                pin2Unlocked.focus();
+            } return;
+        })
+
+        pin2Unlocked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin2Unlocked.value.length==0)
+            {
+                pin1Unlocked.focus();
+            } return;
+        })
+
+        // rogue click handling
+        document.addEventListener("click",(event)=>{
+            if(event.target.id.includes("pin")&&event.target.id.includes("Unlocked"))
+            {
+                for(let i=1;i<=4;i++)
+                {
+                    let test = document.getElementById(`pin${i}Unlocked`);
+                    if(test.value.length==0)
+                    {
+                        test.focus();
+                        return;
+                    }
+                }
+                // if no empty fields are found, put cursor at end
+                pin4Unlocked.focus();
+                return;
+            }
+        })
+
+    // LOCKED
+    let pin1Locked = document.getElementById("pin1Locked");
+    let pin2Locked = document.getElementById("pin2Locked");
+    let pin3Locked = document.getElementById("pin3Locked");
+    let pin4Locked = document.getElementById("pin4Locked");
+    
+        // forward navigation
+        pin1Locked.addEventListener("input",()=>{
+            if(pin1Locked.value.length>0)
+            {
+                pin2Locked.focus();
+            } return;
+        });
+
+        pin2Locked.addEventListener("input",()=>{
+            if(pin2Locked.value.length>0)
+            {
+                pin3Locked.focus();
+            } return;
+        });
+
+        pin3Locked.addEventListener("input",()=>{
+            if(pin3Locked.value.length>0)
+            {
+                pin4Locked.focus();
+            } return;
+        });
+
+        pin4Locked.addEventListener("input",()=>{
+            if(pin4Locked.value.length>1)
+            {
+                pin4Locked.value = pin4Locked.value.slice(0,1);
+            } return;
+        });
+
+        // backward navigation
+        pin4Locked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin4Locked.value.length==0)
+            {
+                pin3Locked.focus();
+            } return;
+        })
+
+        pin3Locked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin3Locked.value.length==0)
+            {
+                pin2Locked.focus();
+            } return;
+        })
+
+        pin2Locked.addEventListener("keydown",(event)=>{
+            if(`${event.code}`=="Backspace"&&pin2Locked.value.length==0)
+            {
+                pin1Locked.focus();
+            } return;
+        })
+
+        // rogue click handling
+        document.addEventListener("click",(event)=>{
+            if(event.target.id.includes("pin")&&event.target.id.includes("Locked"))
+            {
+                for(let i=1;i<=4;i++)
+                {
+                    let test = document.getElementById(`pin${i}Locked`);
+                    if(test.value.length==0)
+                    {
+                        test.focus();
+                        return;
+                    }
+                }
+                // if no empty fields are found, put cursor at end
+                pin4Locked.focus();
+                return;
+            }
+        })

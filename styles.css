@@ -169,6 +169,14 @@ body
     margin-right:0;
 }
 
+input[name=pinInput]
+{
+    width: 12px;
+    margin-left: 10px;
+    border-bottom: 2px solid #3b4fff;
+    text-align:center;
+}
+
 br
 {
     height: 0;
