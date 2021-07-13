@@ -42,3 +42,19 @@ class Rule
         this.blocking = blocking;
     }
 }
+
+function getUserInfo()
+{
+    //Function to get user credentials from storage
+    userInfo = {};
+    //Storing the
+    chrome.storage.sync.get(
+        //Default set user info to null
+        {storedInfo = null}, 
+    function(user)
+    {
+        //Assigning to the user info
+        userInfo = user;
+    });
+    return userInfo;
+}
