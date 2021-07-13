@@ -214,3 +214,32 @@ expandButton4.addEventListener("click",
         return;
     }
 );
+
+// on off listener, startup has mdl ensure it has generated children etc.
+// storedValue must be boolean and RECOVERED FROM STORAGE AT STARTUP
+componentHandler.upgradeDom();
+let onOffCheckbox = document.getElementById("on-off-switch")
+let storedValueIsOff = true
+if(storedValueIsOff)
+{
+    onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
+    onOffCheckbox.parentElement.children[2].innerText = "OFF";
+    onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+}
+onOffCheckbox.addEventListener
+("click",
+    ()=>{
+        if(onOffCheckbox.parentElement.className.includes("is-checked")) // go to off state
+        {
+            onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
+            onOffCheckbox.parentElement.children[2].innerText = "OFF";
+            onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+        }
+        else // go to on state
+        {
+            onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
+            onOffCheckbox.parentElement.children[2].innerText = "ON";
+            onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+        }
+    }
+)    
