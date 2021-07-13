@@ -259,166 +259,78 @@ onOffCheckbox.addEventListener
 )    
 
 // linked PIN INPUTS
+// ONLY CHECKS ON POPUP OPEN 
+let pin1 = document.getElementById("pin1");
+let pin2 = document.getElementById("pin2");
+let pin3 = document.getElementById("pin3");
+let pin4 = document.getElementById("pin4");
 
-    // UNLOCKED
-    if(document.getElementById("pin1Unlocked")!=null) 
-    // make sure unlocked tab is present before definition
-    // ONLY CHECKS ON POPUP OPEN 
-    {
-        let pin1Unlocked = document.getElementById("pin1Unlocked");
-        let pin2Unlocked = document.getElementById("pin2Unlocked");
-        let pin3Unlocked = document.getElementById("pin3Unlocked");
-        let pin4Unlocked = document.getElementById("pin4Unlocked");
-    
-            // forward navigation
-            pin1Unlocked.addEventListener("input",()=>{
-                if(pin1Unlocked.value.length>0)
+    // forward navigation
+    pin1.addEventListener("input",()=>{
+        if(pin1.value.length>0)
+        {
+            pin2.focus();
+        } return;
+    });
+
+    pin2.addEventListener("input",()=>{
+        if(pin2.value.length>0)
+        {
+            pin3.focus();
+        } return;
+    });
+
+    pin3.addEventListener("input",()=>{
+        if(pin3.value.length>0)
+        {
+            pin4.focus();
+        } return;
+    });
+
+    pin4.addEventListener("input",()=>{
+        if(pin4.value.length>1)
+        {
+            pin4.value = pin4.value.slice(0,1);
+        } return;
+    });
+
+    // backward navigation
+    pin4.addEventListener("keydown",(event)=>{
+        if(`${event.code}`=="Backspace"&&pin4.value.length==0)
+        {
+            pin3.focus();
+        } return;
+    })
+
+    pin3.addEventListener("keydown",(event)=>{
+        if(`${event.code}`=="Backspace"&&pin3.value.length==0)
+        {
+            pin2.focus();
+        } return;
+    })
+
+    pin2.addEventListener("keydown",(event)=>{
+        if(`${event.code}`=="Backspace"&&pin2.value.length==0)
+        {
+            pin1.focus();
+        } return;
+    })
+
+    // rogue click handling
+    document.addEventListener("click",(event)=>{
+        if(event.target.id.includes("pin")&&event.target.id.includes(""))
+        {
+            for(let i=1;i<=4;i++)
+            {
+                let test = document.getElementById(`pin${i}`);
+                if(test.value.length==0)
                 {
-                    pin2Unlocked.focus();
-                } return;
-            });
-    
-            pin2Unlocked.addEventListener("input",()=>{
-                if(pin2Unlocked.value.length>0)
-                {
-                    pin3Unlocked.focus();
-                } return;
-            });
-    
-            pin3Unlocked.addEventListener("input",()=>{
-                if(pin3Unlocked.value.length>0)
-                {
-                    pin4Unlocked.focus();
-                } return;
-            });
-    
-            pin4Unlocked.addEventListener("input",()=>{
-                if(pin4Unlocked.value.length>1)
-                {
-                    pin4Unlocked.value = pin4Unlocked.value.slice(0,1);
-                } return;
-            });
-    
-            // backward navigation
-            pin4Unlocked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin4Unlocked.value.length==0)
-                {
-                    pin3Unlocked.focus();
-                } return;
-            })
-    
-            pin3Unlocked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin3Unlocked.value.length==0)
-                {
-                    pin2Unlocked.focus();
-                } return;
-            })
-    
-            pin2Unlocked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin2Unlocked.value.length==0)
-                {
-                    pin1Unlocked.focus();
-                } return;
-            })
-    
-            // rogue click handling
-            document.addEventListener("click",(event)=>{
-                if(event.target.id.includes("pin")&&event.target.id.includes("Unlocked"))
-                {
-                    for(let i=1;i<=4;i++)
-                    {
-                        let test = document.getElementById(`pin${i}Unlocked`);
-                        if(test.value.length==0)
-                        {
-                            test.focus();
-                            return;
-                        }
-                    }
-                    // if no empty fields are found, put cursor at end
-                    pin4Unlocked.focus();
+                    test.focus();
                     return;
                 }
-            })
-    }
-
-
-    // LOCKED
-    if(document.getElementById("pin1Locked")!=null) 
-    // make sure locked tab is present before definition
-    // ONLY CHECKS ON POPUP OPEN 
-    {
-        let pin1Locked = document.getElementById("pin1Locked");
-        let pin2Locked = document.getElementById("pin2Locked");
-        let pin3Locked = document.getElementById("pin3Locked");
-        let pin4Locked = document.getElementById("pin4Locked");
-        
-            // forward navigation
-            pin1Locked.addEventListener("input",()=>{
-                if(pin1Locked.value.length>0)
-                {
-                    pin2Locked.focus();
-                } return;
-            });
-
-            pin2Locked.addEventListener("input",()=>{
-                if(pin2Locked.value.length>0)
-                {
-                    pin3Locked.focus();
-                } return;
-            });
-
-            pin3Locked.addEventListener("input",()=>{
-                if(pin3Locked.value.length>0)
-                {
-                    pin4Locked.focus();
-                } return;
-            });
-
-            pin4Locked.addEventListener("input",()=>{
-                if(pin4Locked.value.length>1)
-                {
-                    pin4Locked.value = pin4Locked.value.slice(0,1);
-                } return;
-            });
-
-            // backward navigation
-            pin4Locked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin4Locked.value.length==0)
-                {
-                    pin3Locked.focus();
-                } return;
-            })
-
-            pin3Locked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin3Locked.value.length==0)
-                {
-                    pin2Locked.focus();
-                } return;
-            })
-
-            pin2Locked.addEventListener("keydown",(event)=>{
-                if(`${event.code}`=="Backspace"&&pin2Locked.value.length==0)
-                {
-                    pin1Locked.focus();
-                } return;
-            })
-
-            // rogue click handling
-            document.addEventListener("click",(event)=>{
-                if(event.target.id.includes("pin")&&event.target.id.includes("Locked"))
-                {
-                    for(let i=1;i<=4;i++)
-                    {
-                        let test = document.getElementById(`pin${i}Locked`);
-                        if(test.value.length==0)
-                        {
-                            test.focus();
-                            return;
-                        }
-                    }
-                    // if no empty fields are found, put cursor at end
-                    pin4Locked.focus();
-                    return;
-                }
-            })
-    }
+            }
+            // if no empty fields are found, put cursor at end
+            pin4.focus();
+            return;
+        }
+    })    
