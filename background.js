@@ -44,7 +44,37 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
+function setUserInfo()
+{
+    chrome.storage.sync.set(
+        {
+            //Default user Information
+            name: "User",
+            dictionary: [],
+            pin: null,
+            personas: [],
+            active: false,
+        },
+        function(){}
+    )
+}
 
+
+function getUserInfo()
+{
+    //Function to get user credentials from storage
+    userInfo = {};
+    //Storing the
+    chrome.storage.sync.get(
+        //Default set user info to null
+        {storedInfo = null}, 
+    function(user)
+    {
+        //Assigning to the user info
+        userInfo = user;
+    });
+    return userInfo;
+}
 /*
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "getTabId"){
