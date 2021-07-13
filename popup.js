@@ -6,16 +6,18 @@ userInfo = {
     bolded: true,
     pin: null,
     pinStatus: false,
-    ruleCount: 0
+    ruleCount: 0,
+    caseSensitivty: false,
+    redactStatus: false
 };
 
-chrome.runtime.sendMessage({
+/*chrome.runtime.sendMessage({
     message: "get_name"
 }, response => {
     if(response.message === "success"){
         document.querySelector("span").innerHTML = `Hello ${response.payload}`;
     }
-});
+});*/
 // chrome.runtime.sendMessage({
 //     message: "get_name"
 // }, response => {
@@ -60,6 +62,11 @@ chrome.runtime.sendMessage({
 function getPinStatus(userInfo)
 {
     userInfo.pinStatus = document.getElementById('pinActive').checked;
+    console.log("Pin status test " + userInfo.pinStatus);
+}
+function getRedaction(userInfo)
+{
+    userInfo.redactStatus = document.getElementById("redactStatus").checked;
 }
 //Function that counts the number of Blocked words
 function countRules(ruleCount)
@@ -75,70 +82,176 @@ function decrementRules(ruleCount)
 
 function grabDictionary(userInfo)
 {
-    //Templates for the id
-    blockID = "block_"
-    subID = "sub_"
+   //Object template to store word combinations
     insert = {
         block:null,
         sub:null
     };
+
     //Going through a loop
-    for(let i = 1; i < userInfo.ruleCount;i++)
+    for(let i = 1; i <= userInfo.ruleCount;i++)
     {
+        //Templates for the id
+        blockID = "block_"
+        subID = "sub_"
         //Appending the number to the sting
         blockID += String(i);
         subID += String(i);
-        insert.block = document.getElementById(blockID).value; //look that up
+
+        insert.block = document.getElementById(blockID).value;
         insert.sub = document.getElementById(subID).value;
-        userInfo.document[i-1] = insert;
+        userInfo.dictionary[i-1] = insert;
     }
 }
 
 function getActiveState(userInfo)
 {
     //Getting the user Active status
-    userInfo.active = document.getElementById('activeState').checked;
+    //userInfo.active = document.getElementById('activeState').checked;
 }
-function getBoldSatus(userInfo)
+function getCaseSatus(userInfo)
 {
     //Getting the user Active status
-    userInfo.bolded = document.getElementById('boldState').checked;
+    userInfo.caseSensitivty = document.getElementById("caseSensitivity").checked;
+    console.log("Case sensitivity status test "+ userInfo.caseSensitivty)
 }
 
 function getInfo(userInfo)
 {
     //Function calls all functions associated with retreiving info from the HTML page
     getActiveState(userInfo);
-    getBoldSatus(userInfo);
+    getCaseSatus(userInfo);
     getPinStatus(userInfo);
     grabDictionary(userInfo);
+    getRedaction(userInfo);
 }
 
 
 //<<<<<<<<Event Listeners that activate different functions>>>>>>>>
 //Grabbing all the information from the page
-document.getElementById("saveChanges").addEventListener("click", getInfo(userInfo));
+document.getElementById("saveChanges").addEventListener("click", function() {getInfo(userInfo)} );
 //Incrementing the rule Count
-document.getElementById("addRule").addEventListener("click", countRules(userInfo.ruleCount));
+document.getElementById("addRule").addEventListener("click", function() {countRules(userInfo.ruleCount)});
 
 // listener for expanding tab 1
 let expandButton1 = document.getElementById("collapse-1-button")
 expandButton1.addEventListener("click",
-    (event) =>
+    () =>
     {
         let containerToCollapse = document.getElementById("collapse-1-div");
         if(expandButton1.innerHTML.includes("add"))
         {
-            containerToCollapse.style.maxHeight="none";
-            expandButton1.innerHTML = `<i class="material-icons">remove</i>`;
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton1.innerHTML = `<i class="material-icons">remove</i>`;   
         }
         else
         {
+            containerToCollapse.style.transition="none";
             containerToCollapse.style.maxHeight="0px";
-            expandButton1.innerHTML = `<i class="material-icons">add</i>`;
+            containerToCollapse.style.overflow="hidden";
+            expandButton1.innerHTML = `<i class="material-icons">add</i>`;  
         }
-
         return;
     }
 );
 
+// listener for expanding tab2
+let expandButton2 = document.getElementById("collapse-2-button")
+expandButton2.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-2-div");
+        if(expandButton2.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton2.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton2.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
+// listener for expanding tab3
+let expandButton3 = document.getElementById("collapse-3-button")
+expandButton3.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-3-div");
+        if(expandButton3.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton3.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton3.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
+// listener for expanding tab4
+let expandButton4 = document.getElementById("collapse-4-button")
+expandButton4.addEventListener("click",
+    () =>
+    {
+        let containerToCollapse = document.getElementById("collapse-4-div");
+        if(expandButton4.innerHTML.includes("add"))
+        {
+            containerToCollapse.style.transition="max-height 5s ease-in-out";
+            containerToCollapse.style.maxHeight="500000px";
+            containerToCollapse.style.overflow="visible";
+            expandButton4.innerHTML = `<i class="material-icons">remove</i>`;   
+        }
+        else
+        {
+            containerToCollapse.style.transition="none";
+            containerToCollapse.style.maxHeight="0px";
+            containerToCollapse.style.overflow="hidden";
+            expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
+        }
+        return;
+    }
+);
+
+// on off listener, startup has mdl ensure it has generated children etc.
+// storedValue must be boolean and RECOVERED FROM STORAGE AT STARTUP
+componentHandler.upgradeDom();
+let onOffCheckbox = document.getElementById("on-off-switch")
+let storedValueIsOff = true
+if(storedValueIsOff)
+{
+    onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
+    onOffCheckbox.parentElement.children[2].innerText = "OFF";
+    onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+}
+onOffCheckbox.addEventListener
+("click",
+    ()=>{
+        if(onOffCheckbox.parentElement.className.includes("is-checked")) // go to off state
+        {
+            onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
+            onOffCheckbox.parentElement.children[2].innerText = "OFF";
+            onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+        }
+        else // go to on state
+        {
+            onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
+            onOffCheckbox.parentElement.children[2].innerText = "ON";
+            onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+        }
+    }
+)    
