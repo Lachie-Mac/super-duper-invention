@@ -6,16 +6,18 @@ userInfo = {
     bolded: true,
     pin: null,
     pinStatus: false,
-    ruleCount: 0
+    ruleCount: 0,
+    caseSensitivty: false,
+    redactStatus: false
 };
 
-// chrome.runtime.sendMessage({
-//     message: "get_name"
-// }, response => {
-//     if(response.message === "success"){
-//         document.querySelector("span").innerHTML = `Hello ${response.payload}`;
-//     }
-// });
+/*chrome.runtime.sendMessage({
+    message: "get_name"
+}, response => {
+    if(response.message === "success"){
+        document.querySelector("span").innerHTML = `Hello ${response.payload}`;
+    }
+});*/
 // chrome.runtime.sendMessage({
 //     message: "get_name"
 // }, response => {
@@ -60,66 +62,78 @@ userInfo = {
 function getPinStatus(userInfo)
 {
     userInfo.pinStatus = document.getElementById('pinActive').checked;
+    console.log("Pin status test " + userInfo.pinStatus);
+}
+function getRedaction(userInfo)
+{
+    userInfo.redactStatus = document.getElementById("redactStatus").checked;
+    console.log("Redactive status test " + userInfo.redactStatus)
 }
 //Function that counts the number of Blocked words
-function countRules(ruleCount)
+function countRules(userInfo)
 {
     //incrementing the counter
-    ruleCount++;
+    userInfo.ruleCount ++;
 }
-function decrementRules(ruleCount)
+function decrementRules(userInfo)
 {
     //decrementing the word count
-    ruleCount--;
+    userInfo.ruleCount--;
+
 }
 
 function grabDictionary(userInfo)
 {
-    //Templates for the id
-    blockID = "block_"
-    subID = "sub_"
+   //Object template to store word combinations
     insert = {
         block:null,
         sub:null
     };
+
     //Going through a loop
-    for(let i = 1; i < userInfo.ruleCount;i++)
+    for(let i = 1; i <= userInfo.ruleCount;i++)
     {
+        //Templates for the id
+        blockID = "block_"
+        subID = "sub_"
         //Appending the number to the sting
         blockID += String(i);
         subID += String(i);
-        insert.block = document.getElementById(blockID).value; //look that up
+
+        insert.block = document.getElementById(blockID).value;
         insert.sub = document.getElementById(subID).value;
-        userInfo.document[i-1] = insert;
+        userInfo.dictionary[i-1] = insert;
     }
 }
 
 function getActiveState(userInfo)
 {
     //Getting the user Active status
-    userInfo.active = document.getElementById('activeState').checked;
+    userInfo.active = document.getElementById("on-off-switch").checked;
 }
-function getBoldSatus(userInfo)
+function getCaseSatus(userInfo)
 {
     //Getting the user Active status
-    userInfo.bolded = document.getElementById('boldState').checked;
+    userInfo.caseSensitivty = document.getElementById("caseSensitivity").checked;
+    console.log("Case sensitivity status test "+ userInfo.caseSensitivty)
 }
 
 function getInfo(userInfo)
 {
     //Function calls all functions associated with retreiving info from the HTML page
     getActiveState(userInfo);
-    getBoldSatus(userInfo);
+    getCaseSatus(userInfo);
     getPinStatus(userInfo);
     grabDictionary(userInfo);
+    getRedaction(userInfo);
 }
 
 
 //<<<<<<<<Event Listeners that activate different functions>>>>>>>>
 //Grabbing all the information from the page
-// document.getElementById("saveChanges").addEventListener("click", getInfo(userInfo));
-// //Incrementing the rule Count
-// document.getElementById("addRule").addEventListener("click", countRules(userInfo.ruleCount));
+document.getElementById("saveChanges").addEventListener("click", function() {getInfo(userInfo)} );
+//Incrementing the rule Count
+document.getElementById("addRule").addEventListener("click", function() {countRules(userInfo)});
 
 // listener for expanding tab 1
 let expandButton1 = document.getElementById("collapse-1-button")

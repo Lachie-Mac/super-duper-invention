@@ -31,25 +31,25 @@
                 <div class="card-slot" style="justify-content: space-evenly;">
                     Change&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="1">
-                        <label class="mdl-textfield__label" for="1"></label>
+                        <input class="mdl-textfield__input" type="text" id="block_1">
+                        <label class="mdl-textfield__label" for="block_1"></label>
                       </div>
                     &#8287to&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="2">
-                        <label class="mdl-textfield__label" for="2"></label>
+                        <input class="mdl-textfield__input" type="text" id="sub_1">
+                        <label class="mdl-textfield__label" for="sub_1"></label>
                       </div>
                 </div>
                 <div class="card-slot" style="justify-content: space-evenly;">
                     Change&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="1">
-                        <label class="mdl-textfield__label" for="1"></label>
+                        <input class="mdl-textfield__input" type="text" id="block_2">
+                        <label class="mdl-textfield__label" for="block_2"></label>
                       </div>
                     &#8287to&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="2">
-                        <label class="mdl-textfield__label" for="2"></label>
+                        <input class="mdl-textfield__input" type="text" id="sub_2">
+                        <label class="mdl-textfield__label" for="sub_2"></label>
                       </div>
                 </div>
                 <!-- Rule 1 Begins -- NOTE: all inputs need UNIQUE IDs which occur twice in both INPUT AND LABEL-->
@@ -69,19 +69,19 @@
                     <div class="card-slot">Case Sensitive
                         <div>
                             <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                                <input type="checkbox" id="switch-1" class="mdl-switch__input">
+                                <input type="checkbox" id="caseSensitivity" class="mdl-switch__input">
                             </label>
                         </div>
                     </div>
                     <div class="card-slot">Redaction
                         <div>
                             <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-3">
-                                <input type="checkbox" id="switch-3" class="mdl-switch__input">
+                                <input type="checkbox" id="redactStatus" class="mdl-switch__input">
                             </label>
                         </div>
                     </div>
                     <div class="card-slot" style="justify-content: center;">
-                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id = "addRule">
                             Add Rule
                         </button>
                     </div>
@@ -137,8 +137,9 @@
             <div class="card-content" id="collapse-3-div">
                 <div class="card-slot">Bolding
                     <div>
+
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-5">
-                            <input type="checkbox" id="switch-5" class="mdl-switch__input">
+                            <input type="checkbox" id="boldActive" class="mdl-switch__input">
                         </label>
                     </div>
                 </div>
@@ -167,7 +168,7 @@
                 <div class="card-slot">Activate Pin
                     <div>
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
-                            <input type="checkbox" id="switch-2" class="mdl-switch__input">
+                            <input type="checkbox" id="pinActive" class="mdl-switch__input">
                         </label>
                     </div>
                 </div>
@@ -201,7 +202,7 @@
         </div>
 
         <div class="save-container">
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
                 Save Changes
             </button> 
         </div>
