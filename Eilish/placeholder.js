@@ -1,13 +1,3 @@
-const text = document.querySelectorAll("h1, h2, h3, h4, h5, p, li, td, caption, span, a");
-//console.log(text.toLowerCase());
-for (let i=0; i<text.length; i++) 
-{
-    //for(let j=0; j<blockedWord.length; j++) {}
-    if(text[i].innerHTML.includes("football")) 
-    {
-        text[i].innerHTML = text[i].innerHTML.replace("football","<b>basketball</b>");
-    };
-};
 
 // function to send messages to background or popup
 function messageBackground(key){
@@ -16,10 +6,9 @@ function messageBackground(key){
         message: `${key}`
     }, response => {
         if(response.message === "success"){
-            if(key === "retrieveRules"){}
             // do this
             // could specify what to do based on input keywords
-        };
+        }
     })
 }
 
@@ -44,14 +33,13 @@ function receiveMessage(key, sentData){
     });
 };
 
-//messageBackground("retrieveRules");
+
+
+// function to retrieve from storage
 
 
 /*
-    send message to background to extract the data from storage
-    extract the blocked words and the replacements
-    call a function that alters the visible text
-
-
+    add presets to storage
+    retrieve the 
 
 */

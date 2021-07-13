@@ -32,3 +32,7 @@ chrome.runtime.sendMessage({
     }
 });
 */
+
+/*
+    when changes are made in the popup send a message to storage to update
+*/

@@ -3,7 +3,10 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
         // here is where we would store our user generic user class
-        name: "Eilish"
+        data: {
+            name: "Eilish",
+            age: "19"
+        }
     });
 });
 
@@ -44,6 +47,11 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         return true;
     }
 });
+
+
+/* 
+    when the storage is changed send a message to the foreground to change the display
+*/
 
 /*
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
