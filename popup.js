@@ -261,7 +261,9 @@ onOffCheckbox.addEventListener
 // linked PIN INPUTS
 
     // UNLOCKED
-    if(document.getElementById("pin1Unlocked")!=null) // make sure unlocked tab is present before definition
+    if(document.getElementById("pin1Unlocked")!=null) 
+    // make sure unlocked tab is present before definition
+    // ONLY CHECKS ON POPUP OPEN 
     {
         let pin1Unlocked = document.getElementById("pin1Unlocked");
         let pin2Unlocked = document.getElementById("pin2Unlocked");
@@ -341,7 +343,9 @@ onOffCheckbox.addEventListener
 
 
     // LOCKED
-    if(document.getElementById("pin1Locked")!=null) // make sure locked tab is present before definition
+    if(document.getElementById("pin1Locked")!=null) 
+    // make sure locked tab is present before definition
+    // ONLY CHECKS ON POPUP OPEN 
     {
         let pin1Locked = document.getElementById("pin1Locked");
         let pin2Locked = document.getElementById("pin2Locked");
