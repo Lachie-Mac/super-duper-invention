@@ -3,7 +3,7 @@
         <!--MDL for buttons/inputs-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-amber.min.css" />
-        <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+        <script src="mdl.js"></script>
 
         <!--Zen Tokyo Zoo for title font & Poppins Font for normal font-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -16,28 +16,13 @@
     <body>
         <div class="header">UNDUCK</div>
         <div class="all-card-container">
- 
-            <div class="card-header">
-                Parental Control
-            </div>
-            <div class="card-content">
-                <div class="card-slot" style="justify-content: center;">   
-                    Parental Control is Active
-                </div>
-                <div class="card-slot" style="justify-content: space-evenly;">
-                    Enter Pin:
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
-                        <label class="mdl-textfield__label" for="sample2"></label>
-                        <span class="mdl-textfield__error">Numbers Only</span>
-                    </div>
-                </div>
-            </div>
-
             <div class="card-header">
                 Active Rules
+                <button id="collapse-1-button" class="mdl-button mdl-button--primary mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+                    <i class="material-icons">add</i>
+                </button>
             </div>
-            <div class="card-content">
+            <div class="card-content" id="collapse-1-div">
                 <div class="card-slot" style="justify-content: space-evenly;">
                     Change&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
@@ -101,8 +86,11 @@
 
             <div class="card-header">
                 Active Personas
+                <button id="collapse-2-button" class="mdl-button mdl-button--primary mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+                    <i class="material-icons">add</i>
+                </button>
             </div>
-            <div class="card-content">
+            <div class="card-content collapse-2-div">
                 <!-- Persona 1 Begins -- NOTE: all inputs need UNIQUE IDs which occur twice in both INPUT AND LABEL -->
                 <div class="card-slot">
                     Donald Trump
@@ -137,8 +125,11 @@
 
             <div class="card-header">
                 Parental Control
+                <button id="collapse-3-button" class="mdl-button mdl-button--primary mdl-js-ripple-effect mdl-js-button mdl-button--fab mdl-button--mini-fab mdl-button--colored">
+                    <i class="material-icons">add</i>
+                </button>
             </div>
-            <div class="card-content">
+            <div class="card-content" id="collapse-3-div">
                 <div class="card-slot">Current Pin
                     <div class="mdl-textfield mdl-js-textfield">
                         <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
@@ -156,10 +147,22 @@
             </div>
 
             <div class="card-header">
-                Active Rules
+                Parental Control
             </div>
-            <div class="card-content">
+            <div class="card-content" style="max-height:none; overflow: none; transition: none;">
+                <div class="card-slot" style="justify-content: center;">   
+                    Parental Control is Active
+                </div>
+                <div class="card-slot" style="justify-content: space-evenly;">
+                    Enter Pin:
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
+                        <label class="mdl-textfield__label" for="sample2"></label>
+                        <span class="mdl-textfield__error">Numbers Only</span>
+                    </div>
+                </div>
             </div>
+
         </div>
 
         <div class="save-container">
