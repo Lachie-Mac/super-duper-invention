@@ -3,7 +3,10 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
         // here is where we would store our user generic user class
-        name: "Eilish"
+        data: {
+            name: "Eilish",
+            age: "19"
+        }
     });
 });
 
@@ -60,6 +63,7 @@ function setUserInfo()
 }
 
 
+
 function getUserInfo()
 {
     //Function to get user credentials from storage
@@ -75,7 +79,7 @@ function getUserInfo()
     });
     return userInfo;
 }
-/*
+
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "getTabId"){
         let queryOptions = { active: true, currentWindow: true };

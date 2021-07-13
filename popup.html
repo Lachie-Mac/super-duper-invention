@@ -1,10 +1,9 @@
-<hmtl>
+<html>
     <head>
         <!--MDL for buttons/inputs-->
         <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
         <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-amber.min.css" />
         <script src="https://code.getmdl.io/1.3.0/material.min.js"></script>
-
 
         <!--Zen Tokyo Zoo for title font & Poppins Font for normal font-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,9 +18,50 @@
         <div class="all-card-container">
  
             <div class="card-header">
+                Parental Control
+            </div>
+            <div class="card-content">
+                <div class="card-slot" style="justify-content: center;">   
+                    Parental Control is Active
+                </div>
+                <div class="card-slot" style="justify-content: space-evenly;">
+                    Enter Pin:
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" pattern="-?[0-9]*(\.[0-9]+)?" id="sample2" style="text-align: right;">
+                        <label class="mdl-textfield__label" for="sample2"></label>
+                        <span class="mdl-textfield__error">Numbers Only</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-header">
                 Active Rules
             </div>
             <div class="card-content">
+                <div class="card-slot" style="justify-content: space-evenly;">
+                    Change&#8287 
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="1">
+                        <label class="mdl-textfield__label" for="1"></label>
+                      </div>
+                    &#8287to&#8287 
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="2">
+                        <label class="mdl-textfield__label" for="2"></label>
+                      </div>
+                </div>
+                <div class="card-slot" style="justify-content: space-evenly;">
+                    Change&#8287 
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="1">
+                        <label class="mdl-textfield__label" for="1"></label>
+                      </div>
+                    &#8287to&#8287 
+                    <div class="mdl-textfield mdl-js-textfield">
+                        <input class="mdl-textfield__input" type="text" id="2">
+                        <label class="mdl-textfield__label" for="2"></label>
+                      </div>
+                </div>
                 <!-- Rule 1 Begins -- NOTE: all inputs need UNIQUE IDs which occur twice in both INPUT AND LABEL-->
                 <div class="slot-joiner">
                     <div class="card-slot" style="justify-content: space-evenly;">
@@ -52,7 +92,7 @@
                     </div>
                     <div class="card-slot" style="justify-content: center;">
                         <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect">
-                            Delete Rule
+                            Add Rule
                         </button>
                     </div>
                 </div>
@@ -120,8 +160,13 @@
             </div>
             <div class="card-content">
             </div>
+        </div>
 
+        <div class="save-container">
+            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px">
+                Save Changes
+            </button> 
         </div>
         <script src="popup.js"></script>
     </body>
-</hmtl>
+</html>
