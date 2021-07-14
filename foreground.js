@@ -1,19 +1,29 @@
 
 // function to replace given texts with substitutes
-function replaceWords(replace, substitute){
+function replaceWords(data){
+    let words = data.dictionary;
+    let boldingStatus = data.bolding;
     let text = document.querySelectorAll("h1, h2, h3, h4, h5, p, b, li, td, caption, span, i , div");
     for(let i=0; i<text.length; i++){
         let textSegment = text[i].innerHTML;
-        for(let j=0; j<replace.length; j++){
-            let blockedWord = replace[j];
-            let substituteWord = substitute[j];
+        for(let j=0; j<words.length; j++){
+            let blockedWord = words[j].blockWord;
+            let substituteWord = words[j].subWord;
+            let caseSensitive = words[j].caseSensitive;
 
             if(textSegment.toLocaleLowerCase().includes(`${blockedWord}`)){
+                // ammend words to allow to check for capital letters
                 capitalBlocked = blockedWord.charAt(0).toUpperCase() + blockedWord.slice(1);
                 capitalSubstitute = substituteWord.charAt(0).toUpperCase() + substituteWord.slice(1);
+                
+                // checking to see if the user wants the replaced words to be bolded
+                if(boldingStatus === true){
+                    substituteWord = `<b>${substituteWord}</b>`;
+                    capitalSubstitute = `<b>${capitalSubstitute}</b>`;
+                }
 
-                text[i].innerHTML = text[i].innerHTML.replaceAll(`${blockedWord}`,`<b>${substituteWord}</b>`);
-                text[i].innerHTML = text[i].innerHTML.replaceAll(`${capitalBlocked}`,`<b>${capitalSubstitute}</b>`);
+                text[i].innerHTML = text[i].innerHTML.replaceAll(`${blockedWord}`,`${substituteWord}`);
+                text[i].innerHTML = text[i].innerHTML.replaceAll(`${capitalBlocked}`,`${capitalSubstitute}`);   
             };
         };
     };

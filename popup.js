@@ -2,29 +2,52 @@
 let allPersonas = [{name: "placeholder1",
                     dictionary: [{
                         blockWord: "block1",
-                        subWord: "sub1"}]
+                        subWord: "sub1",
+                        redaction: false},]
                     },
                     {name: "placeholder2",
                     dictionary: [{
                         blockWord: "block2",
-                        subWord: "sub1"}]
+                        subWord: "sub1",
+                        redaction: false}]
 }];
 
 // default data variable to store all the neccessary info that popup requires
 let popupData = {};
 
-// send message to background requesting the data
-chrome.runtime.sendMessage({
-    message: "requestStoredData"
-}, response => {
-    if(response.message === "success"){
+// listen for call receiving data from background upon active tab change
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "sendingStoredData"){
+        // store data in popupData
         popupData = response.payload;
-    }
-});
-// store data in popupData
-// scan to check which active personas are used
-// add active personas to popupData.dictionary
 
+        // scan to check which active personas are used
+        let activePersonas = popupData.activePersonas;
+        for(let i=0; i<activePersonas.length; i++){
+            // check to see which persona from allPersonas it equals
+            for(let j=0; j<allPersonas.length; j++){
+                if(activePersonas[i] === allPersonas[j]){
+                    // push blocked words to the dictionary
+                    popupData.dictionary.push(allPersonas[j].dictionary);
+                }
+            }
+        }
+
+        // check whether parental lock is active
+        let parentalStatus = popupData.parentalActive;
+        if(parentalStatus === false){
+            // display page as normal
+        }
+        else if(parentalStatus === true){
+            // lock the rules, personas, appearance, settings, etc
+            // alter the parental lock appearance
+        }
+
+        sendResponse({
+            message: "success"
+        });
+    }
+})
 
 
 //
@@ -47,6 +70,8 @@ button.addEventListener("click", function() {
     let tabId = 0;
     // call getInfo function
     // for now we will use placeholder information
+
+    // replace with let data = popupData
     let data = {
         replace: replace,
         substitute: substitute

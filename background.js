@@ -30,15 +30,26 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             files: ["foreground.js"]
         })
             .then(() => {
-                console.log("INJECTED THE FOREGROUND SCRIPT.");
-                //console.log(currentTab);
-                // send the tab id message here to the popup and add a message listener to popup
+                console.log("INJECTED THE FOREGROUND SCRIPT");
+                // pull data from storage
+                chrome.storage.local.get("data", data => {
+                    chrome.runtime.sendMessage({
+                        message: "sendingStoredData",
+                        payload: data
+                    }, response => {
+                        if(response.message === "success"){
+                            console.log("STORED DATA SENT TO POPUP");
+                        }
+                    });
+                });
             })
             .catch(err => console.log(err));
     } 
     
-});
+}); 
 
+/* 
+MAY NEED LATER
 // listen for the request stored data call
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "requestStoredData"){
@@ -54,9 +65,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     }
 });
-
-
-
+*/
 
 let data = {};
 // listen for the update popup data call
@@ -66,7 +75,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         console.log(`RECEIVED DATA FROM POPUP: ${data.replace} ${data.substitute}`);
         // update the storage
         chrome.storage.local.set({
-            test: data
+            data: data
         });
 
         // send response back to popup
