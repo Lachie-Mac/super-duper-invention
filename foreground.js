@@ -1,59 +1,40 @@
-let text = document.querySelectorAll("h1, h2, h3, h4, h5, p, b, li, td, caption, span, a , i , div");
-//console.log(text.toLowerCase());
-for (let i=0; i<text.length; i++) 
-{
-    //for(let j=0; j<blockedWord.length; j++) {}
-    text_segment = text[i].innerHTML
-    if(text_segment.toLocaleLowerCase().includes("football")) 
-    {
-        text[i].innerHTML = text[i].innerHTML.replaceAll("football","<b>basketball</b>");
-        text[i].innerHTML = text[i].innerHTML.replaceAll("Football","<b>basketball</b>");
-    };
-};
 
-// function to send messages to background or popup
-function messageBackground(key){
-    // send message to chrome
-    chrome.runtime.sendMessage({
-        message: `${key}`
-    }, response => {
-        if(response.message === "success"){
-            if(key === "retrieveRules"){}
-            // do this
-            // could specify what to do based on input keywords
+// function to replace given texts with substitutes
+function replaceWords(replace, substitute){
+    let text = document.querySelectorAll("h1, h2, h3, h4, h5, p, b, li, td, caption, span, i , div");
+    for(let i=0; i<text.length; i++){
+        let textSegment = text[i].innerHTML;
+        for(let j=0; j<replace.length; j++){
+            let blockedWord = replace[j];
+            let substituteWord = substitute[j];
+
+            if(textSegment.toLocaleLowerCase().includes(`${blockedWord}`)){
+                capitalBlocked = blockedWord.charAt(0).toUpperCase() + blockedWord.slice(1);
+                capitalSubstitute = substituteWord.charAt(0).toUpperCase() + substituteWord.slice(1);
+
+                text[i].innerHTML = text[i].innerHTML.replaceAll(`${blockedWord}`,`<b>${substituteWord}</b>`);
+                text[i].innerHTML = text[i].innerHTML.replaceAll(`${capitalBlocked}`,`<b>${capitalSubstitute}</b>`);
+            };
         };
-    })
-}
-
-// function to listen for message recieve
-function receiveMessage(key, sentData){
-    chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-        if(request.message === `${key}`){
-            if(chrome.runtime.lastError){
-                sendResponse({
-                    message: "fail"
-                });
-
-                return;
-            }
-            sendResponse({
-                message: "success",
-                payload: sentData
-            });
-            
-            return true;
-        }
-    });
+    };
+    console.log("WORDS REPLACED");
 };
 
-//messageBackground("retrieveRules");
+// run iteration of text when page loaded (script injected)
+//let placeholder1 = ["football", "and"];
+//let placeholder2 = ["australian soccer", "test"];
+//replaceWords(placeholder1,placeholder2);
 
+// listen for the update text call
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "updateText"){
+        let data = request.payload;
+        console.log(`RECEIVED DATA FROM BACKGROUND: ${data}`);
+        // call the function to display the page
+        replaceWords(data.replace,data.substitute);
+        // send response to confirm with background
 
-/*
-    send message to background to extract the data from storage
-    extract the blocked words and the replacements
-    call a function that alters the visible text
+        return true;
 
-
-
-*/
+    }
+});

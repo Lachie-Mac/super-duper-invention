@@ -2,20 +2,15 @@
 // or runs again upon reinstall
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
-        // here is where we would store our user generic user class
-        test: {
-            replace: ["football"],
-            substitute: ["soccer"]
-        },
+        // here is where we store our factory data settings
         data: {
-            active: true,
+            extensionActive: true,
             dictionary: [],
-            personas: [],
+            activePersonas: [],
             pin: "0000",
             pinStatus: false,
             parentalActive: false,
             bolding: true,
-            ruleCount: 0
         }
     });
 });
@@ -43,6 +38,25 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     } 
     
 });
+
+// listen for the request stored data call
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "requestStoredData"){
+        // pull data from storage
+        chrome.storage.local.get('data', data => {
+            sendResponse({
+                message: "success",
+                payload: data
+            });
+        });
+
+        return true;
+
+    }
+});
+
+
+
 
 let data = {};
 // listen for the update popup data call

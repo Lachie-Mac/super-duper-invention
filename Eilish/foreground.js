@@ -1,7 +1,7 @@
 
 // function to replace given texts with substitutes
 function replaceWords(replace, substitute){
-    let text = document.querySelectorAll("h1, h2, h3, h4, h5, p, b, li, td, caption, span, a , i , div");
+    let text = document.querySelectorAll("h1, h2, h3, h4, h5, p, b, li, td, caption, span, i , div");
     for(let i=0; i<text.length; i++){
         let textSegment = text[i].innerHTML;
         for(let j=0; j<replace.length; j++){

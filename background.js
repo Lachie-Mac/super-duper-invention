@@ -2,16 +2,27 @@
 // or runs again upon reinstall
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
-        // here is where we would store our user generic user class
+        // here is where we store our factory data settings
         data: {
-            name: "Eilish",
-            age: "19"
+            extensionActive: true,
+            dictionary: [],
+            activePersonas: [],
+            pin: "0000",
+            pinStatus: false,
+            parentalActive: false,
+            bolding: true,
         }
     });
 });
 
+chrome.storage.local.get("data", info => {
+    //console.log(info);
+})
+
+let currentTab = 0;
 // runs whenever the active tab is changed
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    currentTab = tabId;
     if(changeInfo.status === "complete" && /^http/.test(tab.url)){
         // injects the foreground.js script into the active tab
         chrome.scripting.executeScript({
@@ -20,7 +31,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         })
             .then(() => {
                 console.log("INJECTED THE FOREGROUND SCRIPT.");
-
+                //console.log(currentTab);
                 // send the tab id message here to the popup and add a message listener to popup
             })
             .catch(err => console.log(err));
@@ -28,57 +39,45 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     
 });
 
+// listen for the request stored data call
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "get_name"){
-        chrome.storage.local.get("name", data => {
-            if(chrome.runtime.lastError){
-                sendResponse({
-                    message: "fail"
-                });
-
-                return;
-            }
+    if(request.message === "requestStoredData"){
+        // pull data from storage
+        chrome.storage.local.get('data', data => {
             sendResponse({
-                message: "success", // what the background will send back
-                payload: data.name // the data that will be sent back
+                message: "success",
+                payload: data
             });
         });
 
         return true;
+
     }
 });
-function setUserInfo()
-{
-    chrome.storage.sync.set(
-        {
-            //Default user Information
-            name: "User",
-            dictionary: [],
-            pin: null,
-            personas: [],
-            active: false,
-        },
-        function(){}
-    )
-}
 
 
 
-function getUserInfo()
-{
-    //Function to get user credentials from storage
-    userInfo = {};
-    //Storing the
-    chrome.storage.sync.get(
-        //Default set user info to null
-        {storedInfo = null}, 
-    function(user)
-    {
-        //Assigning to the user info
-        userInfo = user;
-    });
-    return userInfo;
-}
 
-//chrome.runtime.sendMessage() ; sends message to background and popup
-//chrome.tabs.sendMessage() ; sends message to foreground
+let data = {};
+// listen for the update popup data call
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "updatePopupData"){
+        data = request.payload;
+        console.log(`RECEIVED DATA FROM POPUP: ${data.replace} ${data.substitute}`);
+        // update the storage
+        chrome.storage.local.set({
+            test: data
+        });
+
+        // send response back to popup
+        sendResponse({
+            message: "success",
+            payload: currentTab
+        });
+
+        return true;
+
+    }
+});
+
+
