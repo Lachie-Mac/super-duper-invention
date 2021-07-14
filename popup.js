@@ -15,27 +15,23 @@ let allPersonas = [{name: "placeholder1",
 // default data variable to store all the neccessary info that popup requires
 let popupData = {};
 
-// listen for call receiving data from background upon active tab change
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "sendingStoredData"){
-        // store data in popupData
-        popupData = request.payload.data;
-
-        // scan to check which active personas are used
-        let activePersonas = popupData.activePersonas;
-        for(let i=0; i<activePersonas.length; i++){
-            if(activePersonas[i].active){
-                for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                    popupData.dictionary.push(allPersonas[i].dictionary[j]);
-                }
+// pull data from storage upon injection
+chrome.storage.local.get('data', data => {
+    popupData = data;
+    // scan to check which active personas are used
+    let activePersonas = popupData.activePersonas;
+    for(let i=0; i<activePersonas.length; i++){
+        if(activePersonas[i].active){
+            for(let j=0; j<allPersonas[i].dictionary.length; j++){
+                popupData.dictionary.push(allPersonas[i].dictionary[j]);
             }
         }
-
-        // send call to function to display user info
-        popupUpdate(popupData);
-
     }
-})
+
+    // send call to function to display user info
+    popupUpdate(popupData);
+
+});
 
 // PLACEHOLDERS
 let replace = ["football", "and"];
@@ -407,6 +403,7 @@ function popupUpdate(data)
                         containerToCollapse.style.overflow="hidden";
                         expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
                     }
+                    console.log("LOADING FINISHED");
                     return;
                 }
             );   

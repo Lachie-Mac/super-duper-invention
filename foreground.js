@@ -1,3 +1,33 @@
+// pull data from storage upon injection
+let userData = {};
+chrome.storage.local.get('data', data => {
+    // load the text replacement
+    replaceWords(data.data);
+    
+});
+
+/*
+chrome.runtime.sendMessage({
+    message: "requestData"
+}, response => {
+    if(response.message === "success"){
+        let data = response.payload;
+        // load the page
+        //replaceWords(data);
+        // send message to popup 
+        chrome.runtime.sendMessage({
+            message: "loadPopupData",
+            payload: data
+        }, response => {
+            if(response.message === "success"){
+                console.log("POPUP LOAD MESSAGE SUCCESSFULLY SENT TO POPUP");
+            }
+        });
+
+
+    }
+});
+*/
 
 // function to replace given texts with substitutes
 function replaceWords(data){
