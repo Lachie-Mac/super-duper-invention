@@ -8,7 +8,7 @@ let allPersonas = [{name: "placeholder1",
                     {name: "placeholder2",
                     dictionary: [{
                         blockWord: "block2",
-                        subWord: "sub1",
+                        subWord: "sub2",
                         redaction: false}]
 }];
 
@@ -19,16 +19,14 @@ let popupData = {};
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "sendingStoredData"){
         // store data in popupData
-        popupData = response.payload;
+        popupData = request.payload.data;
 
         // scan to check which active personas are used
         let activePersonas = popupData.activePersonas;
         for(let i=0; i<activePersonas.length; i++){
-            // check to see which persona from allPersonas it equals
-            for(let j=0; j<allPersonas.length; j++){
-                if(activePersonas[i] === allPersonas[j]){
-                    // push blocked words to the dictionary
-                    popupData.dictionary.push(allPersonas[j].dictionary);
+            if(activePersonas[i].active){
+                for(let j=0; j<allPersonas[i].dictionary.length; j++){
+                    popupData.dictionary.push(allPersonas[i].dictionary[j]);
                 }
             }
         }
@@ -36,9 +34,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         // send call to function to display user info
         popupUpdate(popupData);
 
-        sendResponse({
-            message: "success"
-        });
     }
 })
 
@@ -493,16 +488,17 @@ function popupUpdate(data)
         })    
 
     // if unlocked 
-    if(!data.parentalActive&&data.pin.length==4)
+    if(!data.parentalActive)
     {
-        // show current pin
-        pin1.value = Number(data.pin.substring(0,1));
-        pin2.value = Number(data.pin.substring(1,2));
-        pin3.value = Number(data.pin.substring(2,3));
-        pin4.value = Number(data.pin.substring(3,4));
-
-        // show activate pin slider
-
+        if(data.pin.length==4)
+        {
+            // show current pin
+            pin1.value = Number(data.pin.substring(0,1));
+            pin2.value = Number(data.pin.substring(1,2));
+            pin3.value = Number(data.pin.substring(2,3));
+            pin4.value = Number(data.pin.substring(3,4));
+        }
+        
         // bolding status
         componentHandler.upgradeDom(); // refresh MDL
         let boldSwitch = document.getElementById("boldActive");
@@ -510,10 +506,11 @@ function popupUpdate(data)
         {    
             boldSwitch.parentElement.className += " is-checked";
         }
-    }
 
-    updatePersonas(data.activePersonas);
-    updateRules(data.dictionary);
+        // updating rules and personas if those tabs are present
+        updatePersonas(data.activePersonas);
+        updateRules(data.dictionary);
+    }
 
     return;
 }

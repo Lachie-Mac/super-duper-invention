@@ -8,25 +8,23 @@ chrome.runtime.onInstalled.addListener(() => {
             dictionary: [],
             activePersonas: [],
             pin: "0000",
-            pinStatus: false,
             parentalActive: false,
             bolding: true,
         },
         data: {extensionActive: true,
-            dictionary: [{blockWord: "cat",
-                        subWord: "dog",
+            dictionary: [{blockWord: "bat",
+                        subWord: "cog",
                         redaction: false  },
-                        {blockWord: "roar",
-                        subWord: "rawr xd",
+                        {blockWord: "wow",
+                        subWord: "shit",
                         redaction: true  }],
             activePersonas: [{name: "placeholder1",
-                              active: true},
+                              active: false},
                              {name: "placeholder2",
-                              active: false}],
+                              active: true}],
             pin: "0000",
-            pinStatus: false,
-            parentalActive: false,
-            bolding: true,}
+            parentalActive: true,
+            bolding: false,}
     });
 });
 
@@ -54,11 +52,7 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
                 chrome.runtime.sendMessage({
                     message: "sendingStoredData",
                     payload: pulledData
-                }, response => {
-                    if(response.message === "success"){
-                        console.log("STORED DATA SENT TO POPUP");
-                    }
-               });
+                });
                 
             })
             .catch(err => console.log(err));
