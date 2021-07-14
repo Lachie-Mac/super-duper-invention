@@ -145,6 +145,8 @@ body
     border-bottom: 1px solid #3b4fff;
     font-size: 18px;
     font-weight: 600;
+
+    text-align: center;
 }
 
 .mdl-textfield__error
