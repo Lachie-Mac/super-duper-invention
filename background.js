@@ -12,14 +12,14 @@ chrome.runtime.onInstalled.addListener(() => {
             bolding: true,
         },
         data: {
-            extensionActive: true,
+            extensionActive: false,
             dictionary: [{
                 blockWord: "football",
                 subWord: "cog",
                 redaction: false
             },
             {
-                blockWord: "and",
+                blockWord: "what",
                 subWord: "shit",
                 redaction: true
             }],
@@ -56,5 +56,38 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
             .catch(err => console.log(err));
     }
 
+});
+
+
+// listener to trigger force reload of foreground
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "forceReload"){
+        chrome.tabs.sendMessage(currentTab, {
+            message: "triggerReload"
+        });
+
+        sendResponse({
+            message: "success"
+        });
+        
+        // keeping channel open
+        return true;
+    }
+});
+
+
+// listener to trigger display replaced text
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "displayText"){
+        chrome.tabs.sendMessage(currentTab, {
+            message: "replaceText"
+        });
+
+        sendResponse({
+            message: "success"
+        });
+
+        return true;
+    }
 });
 
