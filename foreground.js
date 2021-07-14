@@ -1,33 +1,14 @@
 // pull data from storage upon injection
 let userData = {};
 chrome.storage.local.get('data', data => {
-    // load the text replacement
-    replaceWords(data.data);
-    
-});
-
-/*
-chrome.runtime.sendMessage({
-    message: "requestData"
-}, response => {
-    if(response.message === "success"){
-        let data = response.payload;
-        // load the page
-        //replaceWords(data);
-        // send message to popup 
-        chrome.runtime.sendMessage({
-            message: "loadPopupData",
-            payload: data
-        }, response => {
-            if(response.message === "success"){
-                console.log("POPUP LOAD MESSAGE SUCCESSFULLY SENT TO POPUP");
-            }
-        });
-
-
+    // check toggle status
+    let toggleStatus = data.data.extensionActive;
+    if(toggleStatus){
+        // load the text replacement
+        replaceWords(data.data);
     }
 });
-*/
+
 
 // function to replace given texts with substitutes
 function replaceWords(data){
@@ -60,21 +41,28 @@ function replaceWords(data){
     console.log("WORDS REPLACED");
 };
 
-// run iteration of text when page loaded (script injected)
-//let placeholder1 = ["football", "and"];
-//let placeholder2 = ["australian soccer", "test"];
-//replaceWords(placeholder1,placeholder2);
-
-// listen for the update text call
+// listener to trigger reload
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "updateText"){
-        let data = request.payload;
-        console.log(`RECEIVED DATA FROM BACKGROUND: ${data}`);
-        // call the function to display the page
-        replaceWords(data.replace,data.substitute);
-        // send response to confirm with background
+    if(request.message === "triggerReload"){
+        // force reload
+        window.location.reload();
+
+        sendResponse({
+            message: "success"
+        });
 
         return true;
+    }
+});
 
+// listener to trigger display replaced text
+chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
+    if(request.message === "triggerReload"){
+        chrome.storage.local.get('data', data => {
+            replaceWords(data.data);
+        });
+        sendResponse({
+            message: "success"
+        });
     }
 });

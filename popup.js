@@ -1,4 +1,9 @@
-// object to store all personas
+/*
+
+    PERSISTENT DATA
+
+*/
+
 let allPersonas = [{name: "placeholder1",
                     dictionary: [{
                         blockWord: "block1",
@@ -12,33 +17,53 @@ let allPersonas = [{name: "placeholder1",
                         redaction: false}]
 }];
 
+
+/*
+
+    ON POPUP LOAD
+
+*/
 // default data variable to store all the neccessary info that popup requires
 let popupData = {};
 
-// pull data from storage upon injection
-chrome.storage.local.get('data', data => {
-    popupData = data;
-    // scan to check which active personas are used
-    let activePersonas = popupData.activePersonas;
-    for(let i=0; i<activePersonas.length; i++){
-        if(activePersonas[i].active){
-            for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                popupData.dictionary.push(allPersonas[i].dictionary[j]);
+function onLoad(){
+    // pull data from storage upon injection
+    chrome.storage.local.get('data', data => {
+        popupData = data.data;
+        // scan to check which active personas are used
+        let activePersonas = popupData.activePersonas;
+        for(let i=0; i<activePersonas.length; i++){
+            if(activePersonas[i].active){
+                for(let j=0; j<allPersonas[i].dictionary.length; j++){
+                    popupData.dictionary.push(allPersonas[i].dictionary[j]);
+                }
             }
         }
-    }
 
-    // send call to function to display user info
-    popupUpdate(popupData);
+        // send call to function to display user info
+        popupUpdate(popupData);
 
-});
+    });
+}
+
+onLoad();
+
+
+/*
+
+    EVENT LISTENERS FOR BUTTONS
+
+*/
+
+
+
 
 // PLACEHOLDERS
 let replace = ["football", "and"];
 let substitute = ["australian soccer", "test"];
 
-let button = document.getElementById("saveChanges");
-button.addEventListener("click", function() {
+let saveChanges = document.getElementById("saveChanges");
+saveChanges.addEventListener("click", function() {
     // variable to hold tabId
     let tabId = 0;
     // call getInfo function
@@ -69,6 +94,9 @@ button.addEventListener("click", function() {
         }
     });
 });
+
+
+
 
 // ON PAGELOAD --------------------------
 
@@ -237,12 +265,31 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
                     onOffCheckbox.parentElement.children[2].innerText = "OFF";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+
+                    /*
+                    GENERAL IDEA
+                    // force the page to reload
+                    // send message to background to retrieve tab id
+                    // send a message to foreground telling it to reload
+                    // later add retrieve data and send to storage
+                    chrome.runtime.sendMessage({
+                        message: "forceReload"
+                    });
+                    */
                 }
                 else // go to on state
                 {
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+
+                    /*
+                    GENERAL IDEA
+                    // extract data from storage
+                    chrome.runtime.sendMessage({
+                        message: "displayText"
+                    });
+                    */
                 }
             }
         );
