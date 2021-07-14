@@ -3,7 +3,7 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
         // here is where we store our factory data settings
-        data: {
+        dataTemp: {
             extensionActive: true,
             dictionary: [],
             activePersonas: [],
@@ -11,7 +11,22 @@ chrome.runtime.onInstalled.addListener(() => {
             pinStatus: false,
             parentalActive: false,
             bolding: true,
-        }
+        },
+        data: {extensionActive: true,
+            dictionary: [{blockWord: "cat",
+                        subWord: "dog",
+                        redaction: false  },
+                        {blockWord: "roar",
+                        subWord: "rawr xd",
+                        redaction: true  }],
+            activePersonas: [{name: "placeholder1",
+                              active: true},
+                             {name: "placeholder2",
+                              active: false}],
+            pin: "0000",
+            pinStatus: false,
+            parentalActive: false,
+            bolding: true,}
     });
 });
 
@@ -31,17 +46,20 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         })
             .then(() => {
                 console.log("INJECTED THE FOREGROUND SCRIPT");
+                let pulledData = {};
                 // pull data from storage
                 chrome.storage.local.get("data", data => {
-                    chrome.runtime.sendMessage({
-                        message: "sendingStoredData",
-                        payload: data
-                    }, response => {
-                        if(response.message === "success"){
-                            console.log("STORED DATA SENT TO POPUP");
-                        }
-                    });
+                    pulledData = data;
                 });
+                chrome.runtime.sendMessage({
+                    message: "sendingStoredData",
+                    payload: pulledData
+                }, response => {
+                    if(response.message === "success"){
+                        console.log("STORED DATA SENT TO POPUP");
+                    }
+               });
+                
             })
             .catch(err => console.log(err));
     } 

@@ -33,15 +33,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
             }
         }
 
-        // check whether parental lock is active
-        let parentalStatus = popupData.parentalActive;
-        if(parentalStatus === false){
-            // display page as normal
-        }
-        else if(parentalStatus === true){
-            // lock the rules, personas, appearance, settings, etc
-            // alter the parental lock appearance
-        }
+        // send call to function to display user info
+        popupUpdate(popupData);
 
         sendResponse({
             message: "success"
@@ -49,18 +42,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 })
 
-
-//
-userInfo = {
-    dictionary: [],
-    personas: [],
-    active: false,
-    bolded: true,
-    pin: null,
-    pinStatus: false,
-    ruleCount: 0
-};
-
+// PLACEHOLDERS
 let replace = ["football", "and"];
 let substitute = ["australian soccer", "test"];
 
@@ -98,39 +80,6 @@ button.addEventListener("click", function() {
 });
 
 // ON PAGELOAD --------------------------
-
-// default data variable to store all the neccessary info that popup requires
-let popupData = {
-    extensionActive: true,
-    dictionary: [{blockWord: "cat",
-                subWord: "dog",
-                redaction: false  },
-                {blockWord: "roar",
-                subWord: "rawr xd",
-                redaction: true  }],
-    activePersonas: [{name: "placeholder1",
-                      active: true},
-                     {name: "placeholder2",
-                      active: false}],
-    pin: "0000",
-    pinStatus: false,
-    parentalActive: false,
-    bolding: true,
-};
-
-
-
-// object to store all personas
-let allPersonas = [{name: "placeholder1",
-                    dictionary: [{
-                        blockWord: "block1",
-                        subWord: "sub1"}]
-                    },
-                    {name: "placeholder2",
-                    dictionary: [{
-                        blockWord: "block2",
-                        subWord: "sub1"}]
-}];
 
 function updateRules(dictionary)
 {
