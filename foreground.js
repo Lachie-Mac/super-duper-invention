@@ -31,6 +31,9 @@ chrome.runtime.sendMessage({
 function replaceWords()
 {
     let bigString = document.body.innerHTML;
+
+    
+
     // RULES - case insensitive, word detection is a bit shet (words must not have letters either side, but dont necessarily need spaces either side)
     let rules = [{blockWord: "football",
               subWord: "<b>basketball</b> "},
@@ -70,8 +73,6 @@ function replaceWords()
     console.log("finished all html")
     document.body.innerHTML = bigString;
 }
-
-replaceWords();
 
 // // function to replace given texts with substitutes
 // function replaceWords(data){

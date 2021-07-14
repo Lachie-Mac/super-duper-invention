@@ -217,7 +217,7 @@ function popupUpdate(data)
         // setting on/off toggle state
         if(data.extensionActive)
         {
-            onOffCheckbox.parentElement.className += " is-checked";
+            onOffCheckbox.value = "on";
             onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
             onOffCheckbox.parentElement.children[2].innerText = "ON";
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
@@ -229,7 +229,7 @@ function popupUpdate(data)
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red";
         }
 
-        // adding listener to allow toggles
+        // adding listener to allow toggles LISTENER
         onOffCheckbox.addEventListener("click",
             ()=>{
                 if(onOffCheckbox.parentElement.className.includes("is-checked")) // go to off state
