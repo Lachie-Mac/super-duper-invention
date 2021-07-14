@@ -70,9 +70,6 @@ button.addEventListener("click", function() {
             });
         }
     });
-
-    
-
 });
 
 
