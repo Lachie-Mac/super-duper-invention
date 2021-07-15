@@ -18,6 +18,7 @@ chrome.runtime.onInstalled.addListener(() => {
             name: "Influencer",
             active: false
         }],
+
         pin: "0000",
         parentalActive: false,
         bolding: true,
