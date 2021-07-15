@@ -49,6 +49,9 @@ let popupData = {extensionActive: false,
 let focalPoint = {area: "",
                   index: null};
 
+let rulesNew = true;
+let personNew = true;
+
 popupUpdate(popupData) 
 
 // function onLoad(){
@@ -83,12 +86,35 @@ popupUpdate(popupData)
 
 // ON PAGELOAD --------------------------
 
-function updateRules(dictionary)
+function updateRules(dictionary,clicked)
 {
     let rulesDiv = document.getElementById("collapse-1-div");
     let inner = "";
     let blockInput;
     let subInput;
+
+    // storing previous values
+    let changedDictionary = [];
+    let addRule;
+    if(!rulesNew)
+    {
+        addRule = {blockWord: document.getElementById("add_block").value,
+                     subWord: document.getElementById("add_sub").value};
+    }
+    else
+    {
+        addRule = {blockWord:"",
+                   subWord:""};
+    }
+
+    let i=0;
+    while(document.getElementById(`block_${i}`)!=null)
+    {
+        let newblock = {blockWord: document.getElementById(`block_${i}`).value,
+                        subWord: document.getElementById(`sub_${i}`).value};
+        changedDictionary.push(newblock);
+        i++;
+    }
 
     // adding rules from dictionary onto popup
     for(let i=0;i<dictionary.length;i++)
@@ -157,15 +183,45 @@ function updateRules(dictionary)
     // refresh MDL
     componentHandler.upgradeDom();
 
-    // add values to dictionary rules
-    for(let i=0;i<dictionary.length;i++)
+    if(rulesNew) // add values to dictionary rules only when on load
     {
-        blockInput = document.getElementById(`block_${i}`);
-        blockInput.value = dictionary[i].blockWord;
+        for(let i=0;i<dictionary.length;i++)
+        {
+            blockInput = document.getElementById(`block_${i}`);
+            blockInput.value = dictionary[i].blockWord;
 
-        subInput = document.getElementById(`sub_${i}`);
-        subInput.value = dictionary[i].subWord;
+            subInput = document.getElementById(`sub_${i}`);
+            subInput.value = dictionary[i].subWord;
+        }
     }
+    else // replace with previous inputs
+    {
+        for(let i=0;i<changedDictionary.length;i++)
+        {
+            blockInput = document.getElementById(`block_${i}`);
+            blockInput.value = changedDictionary[i].blockWord;
+
+            subInput = document.getElementById(`sub_${i}`);
+            subInput.value = changedDictionary[i].subWord;
+        }
+
+        // replacing previous inputs in add box
+        document.getElementById("add_block").value=addRule.blockWord;
+        document.getElementById("add_sub").value=addRule.subWord;
+    }
+
+    // focusing on target again
+    if(focalPoint.area!="")
+    {
+        let target = document.getElementById(`${clicked.id}`);
+        target.focus();
+        target.select();
+        target.selectionStart = target.selectionEnd;
+    }
+
+    rulesNew = false;
+
+    return;
 }
 
 function updatePersonas(activePersonas)
@@ -235,6 +291,8 @@ function collectDataOnSave()
                     bolding: document.getElementById("boldActive").parentElement.className.includes("is-checked")};
 
     console.log(saveData);
+
+    return;
 }
 
 
@@ -613,39 +671,41 @@ function popupUpdate(data)
     return;
 }
 
+let clicked;
 // click handler function
 document.body.addEventListener("click",
     (event) =>
     {
-        let clicked = event.target
+        clicked = event.target
+        console.log(event.target.id);
 
         // setting focus onto a rule
-        if(clicked.id.includes("rule")
+        if((clicked.id.includes("rule")
            ||clicked.id.includes("sub")
-           ||clicked.id.includes("block"))
+           ||clicked.id.includes("block"))) //&& focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length)) // don't trigger if double click
         {
             focalPoint.area = "rule";
             focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
-            updateRules(popupData.dictionary);
+            updateRules(popupData.dictionary,clicked);
         }
 
         // setting focus onto a persona
-        else if(clicked.id.includes("list-checkbox")
-           ||clicked.id.includes("persona"))
+        else if((clicked.id.includes("list-checkbox")
+           ||clicked.id.includes("persona"))) // && focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length))
         {
             focalPoint.area = "persona";
             focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
-            updatePersonas(popupData.dictionary);
+            updatePersonas(popupData.activePersonas); // add event tag to implement focus here
         }
 
-        else // defocus
-        // if(clicked.id.includes("add") // if click on add box, then defocus
-        //    ||clicked.id.includes("")
-        //   ) 
+        else if(!focalPoint.area!="") // defocus
         {
             focalPoint.area = "";
             focalPoint.index = null;
-            updateRules(popupData.dictionary);
+            updateRules(popupData.dictionary,clicked);
+            updatePersonas(popupData.activePersonas);
         }
+
+        return;
     }
 )
