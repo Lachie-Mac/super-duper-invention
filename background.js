@@ -15,12 +15,10 @@ chrome.runtime.onInstalled.addListener(() => {
         dictionary: [{
             blockWord: "football",
             subWord: "cog",
-            redaction: false
         },
         {
             blockWord: "what",
             subWord: "shit",
-            redaction: true
         }],
         personaDictionary: [],
         activePersonas: [{

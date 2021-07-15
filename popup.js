@@ -4,18 +4,39 @@
 
 */
 
-let allPersonas = [{name: "placeholder1",
+let allPersonas = [{name: "Donald Trump",
                     dictionary: [{
-                        blockWord: "block1",
-                        subWord: "sub1",
-                        redaction: false},]
+                        blockWord: "fake news",
+                        subWord: "news the wrinkly orange sack does not agree with"},
+                    {
+                        blockWord: "Make America Great Again",
+                        subWord: "turn America into a sh*thole"
+                    }]
                     },
-                    {name: "placeholder2",
+                    {name: "12-year-old",
                     dictionary: [{
-                        blockWord: "block2",
-                        subWord: "sub2",
-                        redaction: false}]
-}];
+                        blockWord: "sheesh",
+                        subWord: "*immature sounds*"},
+                    {
+                        blockWord: "lit",
+                        subWord: "excellent"},
+                    {
+                        blockWord: "vibe check",
+                        subWord: "how are you?"
+                    }]
+                    },
+                    {name: "Influencer",
+                    dictionary: [{
+                        blockWord: "entrepreneur",
+                        subWord: "owner of a social media account"},
+                    {
+                        blockWord: "cancelled",
+                        subWord: "called out for being a bad person"},
+                    {
+                        blockWord: "influencer",
+                        subWord: "vapid narcissist"
+                    }
+]}];
 
 
 /*
@@ -76,41 +97,60 @@ function updateRules(dictionary)
     // adding rules from dictionary onto popup
     for(let i=0;i<dictionary.length;i++)
     {
-        inner +=`<div class="card-slot" style="justify-content: space-evenly;">
-                    Change&#8287&#8287
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="block_${i}">
-                        <label class="mdl-textfield__label" for="block_${i}"></label>
+        // adds big slot boi with delete rule button if in focus
+        if(focalPoint.area=="rule"&&focalPoint.index==i)
+        {
+            inner+=`<div class="slot-joiner">
+                    <div class="card-slot" style="justify-content: space-evenly;">
+                        Change&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="block_${i}">
+                            <label class="mdl-textfield__label" for="block_${i}"></label>
+                        </div>
+                        &#8287to&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="sub_${i}">
+                            <label class="mdl-textfield__label" for="sub_${i}"></label>
+                        </div>
                     </div>
-                    &#8287&#8287to&#8287&#8287 
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sub_${i}">
-                        <label class="mdl-textfield__label" for="sub_${i}"></label>
+                    <div class="card-slot" style="justify-content: center;">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id = "deleteRule-${i}">
+                            Delete Rule
+                        </button>
                     </div>
-                 </div>`
+                </div>`;
+        }
+        else
+        {
+            inner +=`<div class="card-slot" id="rule_${i}" style="justify-content: space-evenly;">
+                        Change&#8287&#8287
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="block_${i}">
+                            <label class="mdl-textfield__label" for="block_${i}"></label>
+                        </div>
+                        &#8287&#8287to&#8287&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="sub_${i}">
+                            <label class="mdl-textfield__label" for="sub_${i}"></label>
+                        </div>
+                    </div>`
+        }
     }
 
     inner+=`<div class="slot-joiner">
-                <div class="card-slot" style="justify-content: space-evenly;">
+                <div class="card-slot" id="add-card-1" style="justify-content: space-evenly;">
                     Change&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="1">
-                        <label class="mdl-textfield__label" for="1"></label>
+                        <input class="mdl-textfield__input" type="text" id="add_block">
+                        <label class="mdl-textfield__label" for="add_block"></label>
                     </div>
                     &#8287to&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="2">
-                        <label class="mdl-textfield__label" for="2"></label>
+                        <input class="mdl-textfield__input" type="text" id="add_sub">
+                        <label class="mdl-textfield__label" for="add_sub"></label>
                     </div>
                 </div>
-                <div class="card-slot">Redaction
-                    <div>
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="redactStatus">
-                            <input type="checkbox" id="redactStatus" class="mdl-switch__input">
-                        </label>
-                    </div>
-                </div>
-                <div class="card-slot" style="justify-content: center;">
+                <div class="card-slot" id="add-card-2" style="justify-content: center;">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id = "addRule">
                         Add Rule
                     </button>
@@ -139,11 +179,11 @@ function updatePersonas(activePersonas)
     let checkbox;
 
     // generate list then insert
-    for(let i=0;i<allPersonas.length;i++)
+    for(let i=0;i<activePersonas.length;i++)
     {
 
-        inner+=`<div class="card-slot">
-                    ${allPersonas[i].name}
+        inner+=`<div class="card-slot" id="persona-${i}">
+                    ${activePersonas[i].name}
                     <div>
                         <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-${i}">
                             <input type="checkbox" id="list-checkbox-${i}" class="mdl-checkbox__input"/>
@@ -169,6 +209,41 @@ function updatePersonas(activePersonas)
 
     return;
 }
+
+function collectDataOnSave()
+{
+    // determining which personas have been ticked
+    let saveActivePersonas = popupData.activePersonas;
+    for(let i=0;i<popupData.activePersonas.length;i++)
+    {
+        saveActivePersonas[i].active = document.getElementById(`list-checkbox-${i}`).parentElement.className.includes("is-checked");
+    }
+
+    // grabbing current pin
+    let savePin = "";
+    let pin1 = document.getElementById("pin1");
+    savePin += pin1.value;
+    let pin2 = document.getElementById("pin2");
+    savePin += pin2.value;
+    let pin3 = document.getElementById("pin3");
+    savePin += pin3.value;
+    let pin4 = document.getElementById("pin4");
+    savePin += pin4.value;
+
+    // send collated data to storage
+    chrome.storage.local.set({
+        extensionActive: popupData.extensionActive,
+        dictionary: popupData.dictionary,
+        personaDictionary: [],
+        activePersonas: saveActivePersonas,
+        pin: savePin,
+        parentalActive: true,
+        bolding: document.getElementById("boldActive").parentElement.className.includes("is-checked")
+    });
+}
+
+let focalPoint = {area: "",
+                  index: null};
 
 function popupUpdate(data)
 {
@@ -424,7 +499,6 @@ function popupUpdate(data)
                         containerToCollapse.style.overflow="hidden";
                         expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
                     }
-                    console.log("LOADING FINISHED");
                     return;
                 }
             );   
@@ -528,7 +602,61 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         updatePersonas(data.activePersonas);
         updateRules(data.dictionary);
+
+        // inserting save changes button
+        let saveContainer = document.getElementById("save-container");
+        saveContainer.className = "save-container";
+        saveContainer.innerHTML = `<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
+                                        Save Changes
+                                    </button>`;
+        componentHandler.upgradeDom();
+
+        // add listener to save button
+        document.getElementById("saveChanges").addEventListener("click",
+            ()=>
+            {
+                collectDataOnSave();
+            }
+        )
     }
 
     return;
 }
+
+// click handler function
+document.body.addEventListener("click",
+    (event) =>
+    {
+        let clicked = event.target
+        chrome.storage.local.get(["dictionary", "activePersonas"], (res) => {
+            let dictionary = res.dictionary;
+            let activePersonas = res.activePersonas;
+            // setting focus onto a rule
+            if(clicked.id.includes("rule")
+                ||clicked.id.includes("sub")
+                ||clicked.id.includes("block"))
+            {
+                focalPoint.area = "rule";
+                focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+                updateRules(dictionary);
+            }
+
+            // setting focus onto a persona
+            else if(clicked.id.includes("list-checkbox")
+                ||clicked.id.includes("persona"))
+            {
+                focalPoint.area = "persona";
+                focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+                updatePersonas(activePersonas);
+            }
+
+            else if(!focalPoint.area == "")// defocus
+            {
+                focalPoint.area = "";
+                focalPoint.index = null;
+                updateRules(dictionary);
+                updatePersonas(activePersonas);
+            }
+        });
+    }
+)
