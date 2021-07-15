@@ -7,3 +7,7 @@ Tapiwanashe Kusangaya,: Online check using gitWeb
 Jospeh: Vs Code test
 Fuck this thing
 Anothert try
+
+KNOWN ISSUES: 
+the substitute cannot contain the blocked word, eg. change 'the' to 'no way the', as this will cause an infinite loop
+messenger.com is broken

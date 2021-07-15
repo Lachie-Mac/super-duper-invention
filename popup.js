@@ -59,7 +59,7 @@ let popupData = {};
 let focalPoint = {area: "",
                   index: null};
 
-let maintainStoredRulesInputs = true;
+let addStoredRulesInputs = true;
 let maintainAddInputs = true;
 let personaNew = true;
 
@@ -170,18 +170,17 @@ function updateRules(dictionary,clicked)
     // refresh MDL
     componentHandler.upgradeDom();
 
-    if(!maintainStoredRulesInputs) // add values to dictionary rules only when on load
+    // always load in inputs from dictionary, sometimes replace them with old inputs.
+    for(let i=0;i<dictionary.length;i++)
     {
-        for(let i=0;i<dictionary.length;i++)
-        {
-            blockInput = document.getElementById(`block_${i}`);
-            blockInput.value = dictionary[i].blockWord;
+        blockInput = document.getElementById(`block_${i}`);
+        blockInput.value = dictionary[i].blockWord;
 
-            subInput = document.getElementById(`sub_${i}`);
-            subInput.value = dictionary[i].subWord;
-        }
-    }
-    else // replace with previous inputs
+        subInput = document.getElementById(`sub_${i}`);
+        subInput.value = dictionary[i].subWord;
+    }        
+
+    if(addStoredRulesInputs) // replace with previous inputs
     {
         for(let i=0;i<changedDictionary.length;i++)
         {
@@ -213,8 +212,6 @@ function updateRules(dictionary,clicked)
         
     }
 
-    maintainStoredRulesInputs = false;
-
     // event listener for add button
     document.getElementById("addRule").addEventListener("click",
         ()=>
@@ -225,8 +222,8 @@ function updateRules(dictionary,clicked)
             // pushing rule to local dictionary
             popupData.dictionary.push(newRule);
 
-            // update rules with data.dictionary, no clicked event in focus, maintain inputs in dictionary
-            maintainStoredRulesInputs = true;
+            // when adding a rule, lose the add inputs, and add back previous rules
+            addStoredRulesInputs = true;
             maintainAddInputs = false;
             updateRules(popupData.dictionary,null);
         }
@@ -340,8 +337,6 @@ function updatePersonas(activePersonas,clicked)
         }
     }
 
-    personaNew = false;
-
     return;
 }
 
@@ -397,7 +392,7 @@ function popupUpdate(data)
     if(data.parentalActive)
     {
         // set toggle to permanently on
-        onOffCheckbox.parentElement.className += " is-checked";
+        onOffCheckbox.parentElement.MaterialSwitch.on();
         onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
         onOffCheckbox.parentElement.children[2].innerText = "ON";
         onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
@@ -431,7 +426,7 @@ function popupUpdate(data)
             onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
             onOffCheckbox.parentElement.children[2].innerText = "ON";
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
-            onOffCheckbox.parentElement.className+=" is-checked";
+            onOffCheckbox.parentElement.MaterialSwitch.on();
         }
         else
         {
@@ -440,7 +435,7 @@ function popupUpdate(data)
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red";
         }
 
-        // adding listener to allow toggles LISTENER
+        // adding listener to allow toggling on and off
         onOffCheckbox.addEventListener("click",
             ()=>{
                 if(onOffCheckbox.parentElement.className.includes("is-checked")) // go to off state
@@ -448,6 +443,8 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: red;";
                     onOffCheckbox.parentElement.children[2].innerText = "OFF";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
+                    onOffCheckbox.parentElement.MaterialSwitch.off();
+
 
                     // retrieve tabId from storage
                     chrome.storage.local.get("currentTabId", tabId => {
@@ -468,6 +465,7 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+                    onOffCheckbox.parentElement.MaterialSwitch.on();
 
                     // retrieve tabId from storage
                     chrome.storage.local.get("currentTabId", tabId => {
@@ -657,6 +655,7 @@ function popupUpdate(data)
             if(pin1.value.length>0)
             {
                 pin2.focus();
+                pin2.select();
             } return;
         });
 
@@ -664,6 +663,7 @@ function popupUpdate(data)
             if(pin2.value.length>0)
             {
                 pin3.focus();
+                pin3.select();
             } return;
         });
 
@@ -671,6 +671,7 @@ function popupUpdate(data)
             if(pin3.value.length>0)
             {
                 pin4.focus();
+                pin4.select();
             } return;
         });
 
@@ -686,6 +687,7 @@ function popupUpdate(data)
             if(`${event.code}`=="Backspace"&&pin4.value.length==0)
             {
                 pin3.focus();
+                pin3.select();
             } return;
         })
 
@@ -693,6 +695,7 @@ function popupUpdate(data)
             if(`${event.code}`=="Backspace"&&pin3.value.length==0)
             {
                 pin2.focus();
+                pin2.select();
             } return;
         })
 
@@ -700,6 +703,7 @@ function popupUpdate(data)
             if(`${event.code}`=="Backspace"&&pin2.value.length==0)
             {
                 pin1.focus();
+                pin1.select();
             } return;
         })
 
@@ -713,11 +717,13 @@ function popupUpdate(data)
                     if(test.value.length==0)
                     {
                         test.focus();
+                        test.select();
                         return;
                     }
                 }
                 // if no empty fields are found, put cursor at end
                 pin4.focus();
+                pin4.select();
                 return;
             }
         })
@@ -739,20 +745,23 @@ function popupUpdate(data)
         let boldSwitch = document.getElementById("boldActive");
         if(data.bolding)
         {    
-            boldSwitch.parentElement.className += " is-checked";
+            boldSwitch.parentElement.MaterialSwitch.on();
         }
 
-        // updating rules and personas if those tabs are present
-        maintainStoredRulesInputs = true;
-        personaNew = true;
+        // updating rules entirely from dictionary when updatePopup is called
+        addStoredRulesInputs = false;
         maintainAddInputs = false;
-        updatePersonas(data.activePersonas,clicked);
         updateRules(data.dictionary,clicked);
+
+        // updating rules entirely from storage when updatePopup is called.
+        personaNew = true;
+        updatePersonas(data.activePersonas,clicked);
 
         // inserting save changes button
         let saveContainer = document.getElementById("save-container");
         saveContainer.className = "save-container";
-        saveContainer.innerHTML = `<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
+        saveContainer.innerHTML = `<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" 
+                                    id = "saveChanges">
                                         Save Changes
                                     </button>`;
         componentHandler.upgradeDom();
@@ -862,6 +871,10 @@ document.body.addEventListener("click",
         {
             focalPoint.area = "rule";
             focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+
+            // when focusing on a rule, return previous inputs to every section
+            maintainAddInputs = true;
+            addStoredRulesInputs = true;
             updateRules(popupData.dictionary,clicked);
         }
 
@@ -870,6 +883,8 @@ document.body.addEventListener("click",
         {
             focalPoint.area = "persona";
             focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+
+            personaNew = false;
             updatePersonas(popupData.activePersonas,clicked); // add event tag to implement focus here
         }
 
@@ -879,6 +894,8 @@ document.body.addEventListener("click",
             {
                 focalPoint.area = "persona";
                 focalPoint.index = clicked.parentElement.id.substring(clicked.parentElement.id.length-1,clicked.parentElement.id.length);
+
+                personaNew = false;
                 updatePersonas(popupData.activePersonas,clicked); // add event tag to implement focus here
             }
             else if(clicked.parentElement.id.includes("deleteRule")) // delete listener
@@ -886,8 +903,8 @@ document.body.addEventListener("click",
                 index = clicked.parentElement.id.substring(clicked.parentElement.id.length-1,clicked.parentElement.id.length);
                 popupData.dictionary.splice(index,1);
 
-                // update Rules while maintaining data that was in add boxes
-                maintainStoredRulesInputs = false;
+                // update Rules while maintaining data that was in add boxes, cannot add stored rules as this will include deleted rule
+                addStoredRulesInputs = false;
                 maintainAddInputs = true;
                 updateRules(popupData.dictionary,null)
             }
@@ -897,7 +914,13 @@ document.body.addEventListener("click",
         {
             focalPoint.area = "";
             focalPoint.index = null;
+
+            //  when defocusing, return all inputs as they were
+            addStoredRulesInputs = true;
+            maintainAddInputs = true;
             updateRules(popupData.dictionary,clicked);
+
+            personaNew = false;
             updatePersonas(popupData.activePersonas,clicked);
         }
 

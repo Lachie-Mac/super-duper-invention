@@ -1,5 +1,5 @@
 // storing all personas so that updateWords can access its data
-let allPersonas = [{name: "Donald Trump",
+allPersonas = [{name: "Donald Trump",
 dictionary: [{
     blockWord: "Donald Trump",
     subWord: "Toupee Wearing Orange Demon"},
