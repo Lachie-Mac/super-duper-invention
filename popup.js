@@ -4,11 +4,14 @@
 
 */
 
-let clicked;
+let clicked = null;
 
 
 let allPersonas = [{name: "Donald Trump",
                     dictionary: [{
+                        blockWord: "Donald Trump",
+                        subWord: "Toupee wearing Orange Demon"},
+                    {
                         blockWord: "fake news",
                         subWord: "news the wrinkly orange sack does not agree with"},
                     {
@@ -191,7 +194,7 @@ function updateRules(dictionary,clicked)
     }
 
     // focusing on target again
-    if(focalPoint.area!="" && clicked != undefined)
+    if(focalPoint.area!="" && clicked != null)
     {
         let target = document.getElementById(`${clicked.id}`);
         target.focus();
@@ -657,6 +660,23 @@ function popupUpdate(data)
             ()=>
             {
                 collectDataOnSave();
+
+                // retrieve tabId from storage
+                chrome.storage.local.get("currentTabId", tabId => {
+                    chrome.tabs.sendMessage(tabId.currentTabId, {
+                        message: "triggerReset",
+                        payload: true
+                    }, response => {
+                        if(response.message === "success"){
+                            chrome.tabs.sendMessage(tabId.currentTabId, {
+                                message: "triggerReplace",
+                                payload: false
+                            });
+                        }
+                    });
+                });
+                // restore the original html
+                // load in the new changes
             }
         )
     }

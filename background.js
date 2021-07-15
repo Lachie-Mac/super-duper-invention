@@ -3,35 +3,24 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.storage.local.set({
         // here is where we store our factory data settings
-        dataTemp: {
-            extensionActive: true,
-            dictionary: [],
-            activePersonas: [],
-            pin: "0000",
-            parentalActive: false,
-            bolding: true,
-        },
-        extensionActive: true,
-        dictionary: [{
-            blockWord: "football",
-            subWord: "cog",
-        },
-        {
-            blockWord: "what",
-            subWord: "shit",
-        }],
+        extensionActive: false,
+        dictionary: [],
         personaDictionary: [],
         activePersonas: [{
-            name: "placeholder1",
+            name: "Donald Trump",
             active: false
         },
         {
-            name: "placeholder2",
-            active: true
+            name: "12-year-old",
+            active: false
+        },
+        {
+            name: "Influencer",
+            active: false
         }],
         pin: "0000",
         parentalActive: false,
-        bolding: false,
+        bolding: true,
         currentTabId: "",
         baseHTML: ""
     });

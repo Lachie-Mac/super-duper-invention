@@ -1,3 +1,43 @@
+// storing all personas so that updateWords can access its data
+let allPersonas = [{name: "Donald Trump",
+dictionary: [{
+    blockWord: "Donald Trump",
+    subWord: "Toupee Wearing Orange Demon"},
+{
+    blockWord: "Donald John Trump",
+    subWord: "Toupee Wearing Orange Demon"},
+{
+    blockWord: "fake news",
+    subWord: "news the wrinkly orange sack does not agree with"},
+{
+    blockWord: "Make America Great Again",
+    subWord: "turn America into a sh*thole"
+}]
+},
+{name: "12-year-old",
+dictionary: [{
+    blockWord: "sheesh",
+    subWord: "*immature sounds*"},
+{
+    blockWord: "lit",
+    subWord: "excellent"},
+{
+    blockWord: "vibe check",
+    subWord: "how are you?"
+}]
+},
+{name: "Influencer",
+dictionary: [{
+    blockWord: "entrepreneur",
+    subWord: "owner of a social media account"},
+{
+    blockWord: "cancelled",
+    subWord: "called out for being a bad person"},
+{
+    blockWord: "influencer",
+    subWord: "vapid narcissist"
+}
+]}];
 
 function updateWords(revertActive)
 {
@@ -13,6 +53,17 @@ function updateWords(revertActive)
             parentalActive: res.parentalActive,
             bolding: res.bolding
         }
+
+        // add active personas to dictionary
+        let activePersonas = data.activePersonas;
+        for(let z=0; z<activePersonas.length; z++){
+            if(activePersonas[z].active){
+                for(let w=0; w<allPersonas[z].dictionary.length; w++){
+                    data.dictionary.push(allPersonas[z].dictionary[w]);
+                }
+            }
+        }
+
         let first_duplicate =  data.dictionary;
         let second_duplicate = [];
         let bolded = data.bolding;
@@ -113,18 +164,6 @@ chrome.storage.local.get(["extensionActive","dictionary","personaDictionary","ac
         bolding: res.bolding
     }
     console.log(data);
-    /*
-    let popupData = data;
-    // scan to check which active personas are used
-    let activePersonas = popupData.activePersonas;
-    for(let i=0; i<activePersonas.length; i++){
-        if(activePersonas[i].active){
-            for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                popupData.personaDictionary.push(allPersonas[i].dictionary[j]);
-            }
-        }
-    }
-    */
 
     let toggleStatus = data.extensionActive;
     let revertActive = false;
@@ -135,9 +174,9 @@ chrome.storage.local.get(["extensionActive","dictionary","personaDictionary","ac
 
 
 // on load need to retrieve the base html and store it in storage
-let bigString = document.body.innerHTML;
+let basePage = document.body.innerHTML;
 chrome.storage.local.set({
-    baseHTML: bigString
+    baseHTML: basePage
 });
 
 
