@@ -8,7 +8,7 @@ INSTALLATION INSTRUCTIONS:
 - go to chrome://extensions
 - click on developer mode
 - click on load unpacked
-- select the folder location
+- select the folder
 - the extension is now in the puzzle piece icon, pin it to show it on the bookmarks bar
 - you can now unduck the muck
 
