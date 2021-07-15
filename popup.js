@@ -404,7 +404,7 @@ function popupUpdate(data)
                                 <div class="card-content" style="max-height: none; overflow: visible;">
                                     <div class="card-slot">Enter Pin
                                         <!- IDs IN USE ->
-                                        <div class="mdl-textfield mdl-js-textfield" style="flex-direction: row; display:flex;">
+                                        <div class="mdl-textfield mdl-js-textfield" style="flex-direction: row; display:flex;" id="pinLockedDisplayBox">
                                             <input class="mdl-textfield__input" type="number" id="pin1" name="pinInput" style="margin-left:auto">
                                             <label class="mdl-textfield__label" for="pin1"></label>
                                             <input class="mdl-textfield__input" type="number" id="pin2" name="pinInput">
@@ -822,9 +822,9 @@ function popupUpdate(data)
         )
 
     }
-    else if(data.parentalActive)// if locked, implement pin checking listener
+    else if(data.parentalActive)// if locked, implement pin checking listener on container that is only present when locked
     {
-        document.body.addEventListener("keyup",
+        document.getElementById("pinLockedDisplayBox").addEventListener("keyup",
             ()=>
             {
                 let p1 = document.getElementById("pin1");
