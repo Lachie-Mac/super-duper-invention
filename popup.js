@@ -260,8 +260,8 @@ function popupUpdate(data)
 
                     // retrieve tabId from storage
                     chrome.storage.local.get("currentTabId", tabId => {
-                        chrome.tabs.sendMessage(tabId, {
-                            message: "triggerReplace"
+                        chrome.tabs.sendMessage(tabId.currentTabId, {
+                            message: "triggerReplace",
                         });
                     });
 

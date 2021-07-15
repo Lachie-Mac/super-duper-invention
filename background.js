@@ -23,6 +23,7 @@ chrome.runtime.onInstalled.addListener(() => {
                 subWord: "shit",
                 redaction: true
             }],
+            personaDictionary: [],
             activePersonas: [{
                 name: "placeholder1",
                 active: false
@@ -36,13 +37,14 @@ chrome.runtime.onInstalled.addListener(() => {
             bolding: false,
         },
         currentTabId: "",
-        
+
     });
 });
 
 
 // runs whenever the active tab is changed
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    console.log(tabId);
     chrome.storage.local.set({
         currentTabId: tabId
     });
