@@ -11,31 +11,29 @@ chrome.runtime.onInstalled.addListener(() => {
             parentalActive: false,
             bolding: true,
         },
-        data: {
-            extensionActive: false,
-            dictionary: [{
-                blockWord: "football",
-                subWord: "cog",
-                redaction: false
-            },
-            {
-                blockWord: "what",
-                subWord: "shit",
-                redaction: true
-            }],
-            personaDictionary: [],
-            activePersonas: [{
-                name: "placeholder1",
-                active: false
-            },
-            {
-                name: "placeholder2",
-                active: true
-            }],
-            pin: "0000",
-            parentalActive: false,
-            bolding: false,
+        extensionActive: true,
+        dictionary: [{
+            blockWord: "football",
+            subWord: "cog",
+            redaction: false
         },
+        {
+            blockWord: "what",
+            subWord: "shit",
+            redaction: true
+        }],
+        personaDictionary: [],
+        activePersonas: [{
+            name: "placeholder1",
+            active: false
+        },
+        {
+            name: "placeholder2",
+            active: true
+        }],
+        pin: "0000",
+        parentalActive: false,
+        bolding: false,
         currentTabId: "",
         baseHTML: ""
     });
@@ -56,6 +54,10 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
         })
             .then(() => {
                 console.log("INJECTED THE FOREGROUND SCRIPT");
+                chrome.tabs.sendMessage(tabId.currentTabId, {
+                    message: "triggerReplace",
+                    payload: false
+                });
             })
             .catch(err => console.log(err));
     }
@@ -63,35 +65,4 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 
-// listener to trigger force reload of foreground
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "forceReload"){
-        chrome.tabs.sendMessage(currentTab, {
-            message: "triggerReload"
-        });
-
-        sendResponse({
-            message: "success"
-        });
-        
-        // keeping channel open
-        return true;
-    }
-});
-
-
-// listener to trigger display replaced text
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "displayText"){
-        chrome.tabs.sendMessage(currentTab, {
-            message: "replaceText"
-        });
-
-        sendResponse({
-            message: "success"
-        });
-
-        return true;
-    }
-});
 

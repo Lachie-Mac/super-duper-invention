@@ -28,9 +28,18 @@ let popupData = {};
 
 function onLoad(){
     // pull data from storage upon injection
-    chrome.storage.local.get('data', data => {
-        popupData = data.data;
-        console.log(popupData);
+    chrome.storage.local.get(["extensionActive","dictionary","personaDictionary","activePersonas","pin","parentalActive","bolding"], (res) => {
+        let data = {
+            extensionActive: res.extensionActive,
+            dictionary: res.dictionary,
+            personaDictionary: res.personaDictionary,
+            activePersonas: res.activePersonas,
+            pin: res.pin,
+            parentalActive: res.parentalActive,
+            bolding: res.bolding
+        }
+        console.log(data);
+        let popupData = data;
         // scan to check which active personas are used
         let activePersonas = popupData.activePersonas;
         for(let i=0; i<activePersonas.length; i++){
@@ -43,7 +52,6 @@ function onLoad(){
 
         // send call to function to display user info
         popupUpdate(popupData);
-
     });
 }
 
@@ -203,10 +211,10 @@ function popupUpdate(data)
         // setting on/off toggle state
         if(data.extensionActive)
         {
-            onOffCheckbox.value = "on";
             onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
             onOffCheckbox.parentElement.children[2].innerText = "ON";
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+            onOffCheckbox.parentElement.className+=" is-checked";
         }
         else
         {
@@ -224,21 +232,19 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].innerText = "OFF";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
 
-                    
-                    // send message to foreground
-                    // upon receiving message trigger replaceWords
-
-
-                    /*
-                    GENERAL IDEA
-                    // force the page to reload
-                    // send message to background to retrieve tab id
-                    // send a message to foreground telling it to reload
-                    // later add retrieve data and send to storage
-                    chrome.runtime.sendMessage({
-                        message: "forceReload"
+                    // retrieve tabId from storage
+                    chrome.storage.local.get("currentTabId", tabId => {
+                        chrome.tabs.sendMessage(tabId.currentTabId, {
+                            message: "triggerReset",
+                            payload: true
+                        });
                     });
-                    */
+
+                    // change extensionActive status to false
+                    chrome.storage.local.set({
+                        extensionActive: false
+                    });
+
                 }
                 else // go to on state
                 {
@@ -252,6 +258,11 @@ function popupUpdate(data)
                             message: "triggerReplace",
                             payload: false
                         });
+                    });
+
+                    // change extensionActive status to true
+                    chrome.storage.local.set({
+                        extensionActive: true
                     });
                 }
             }
