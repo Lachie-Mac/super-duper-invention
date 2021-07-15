@@ -4,6 +4,9 @@
 
 */
 
+let clicked;
+
+
 let allPersonas = [{name: "Donald Trump",
                     dictionary: [{
                         blockWord: "fake news",
@@ -47,36 +50,12 @@ let allPersonas = [{name: "Donald Trump",
 // default data variable to store all the neccessary info that popup requires
 let popupData = {};
 
-function onLoad(){
-    // pull data from storage upon injection
-    chrome.storage.local.get(["extensionActive","dictionary","personaDictionary","activePersonas","pin","parentalActive","bolding"], (res) => {
-        let data = {
-            extensionActive: res.extensionActive,
-            dictionary: res.dictionary,
-            personaDictionary: res.personaDictionary,
-            activePersonas: res.activePersonas,
-            pin: res.pin,
-            parentalActive: res.parentalActive,
-            bolding: res.bolding
-        }
-        console.log(data);
-        let popupData = data;
-        // scan to check which active personas are used
-        let activePersonas = popupData.activePersonas;
-        for(let i=0; i<activePersonas.length; i++){
-            if(activePersonas[i].active){
-                for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                    popupData.personaDictionary.push(allPersonas[i].dictionary[j]);
-                }
-            }
-        }
+let focalPoint = {area: "",
+                  index: null};
 
-        // send call to function to display user info
-        popupUpdate(popupData);
-    });
-}
+let rulesNew = true;
+let personaNew = true;
 
-onLoad();
 
 
 /*
@@ -87,12 +66,35 @@ onLoad();
 
 // ON PAGELOAD --------------------------
 
-function updateRules(dictionary)
+function updateRules(dictionary,clicked)
 {
     let rulesDiv = document.getElementById("collapse-1-div");
     let inner = "";
     let blockInput;
     let subInput;
+
+    // storing previous values
+    let changedDictionary = [];
+    let addRule;
+    if(!rulesNew)
+    {
+        addRule = {blockWord: document.getElementById("add_block").value,
+                     subWord: document.getElementById("add_sub").value};
+    }
+    else
+    {
+        addRule = {blockWord:"",
+                   subWord:""};
+    }
+
+    let l=0;
+    while(document.getElementById(`block_${l}`)!=null)
+    {
+        let newblock = {blockWord: document.getElementById(`block_${l}`).value,
+                        subWord: document.getElementById(`sub_${l}`).value};
+        changedDictionary.push(newblock);
+        l++;
+    }
 
     // adding rules from dictionary onto popup
     for(let i=0;i<dictionary.length;i++)
@@ -161,15 +163,45 @@ function updateRules(dictionary)
     // refresh MDL
     componentHandler.upgradeDom();
 
-    // add values to dictionary rules
-    for(let i=0;i<dictionary.length;i++)
+    if(rulesNew) // add values to dictionary rules only when on load
     {
-        blockInput = document.getElementById(`block_${i}`);
-        blockInput.value = dictionary[i].blockWord;
+        for(let i=0;i<dictionary.length;i++)
+        {
+            blockInput = document.getElementById(`block_${i}`);
+            blockInput.value = dictionary[i].blockWord;
 
-        subInput = document.getElementById(`sub_${i}`);
-        subInput.value = dictionary[i].subWord;
+            subInput = document.getElementById(`sub_${i}`);
+            subInput.value = dictionary[i].subWord;
+        }
     }
+    else // replace with previous inputs
+    {
+        for(let i=0;i<changedDictionary.length;i++)
+        {
+            blockInput = document.getElementById(`block_${i}`);
+            blockInput.value = changedDictionary[i].blockWord;
+
+            subInput = document.getElementById(`sub_${i}`);
+            subInput.value = changedDictionary[i].subWord;
+        }
+
+        // replacing previous inputs in add box
+        document.getElementById("add_block").value=addRule.blockWord;
+        document.getElementById("add_sub").value=addRule.subWord;
+    }
+
+    // focusing on target again
+    if(focalPoint.area!="" && clicked != undefined)
+    {
+        let target = document.getElementById(`${clicked.id}`);
+        target.focus();
+        target.select();
+        target.selectionStart = target.selectionEnd;
+    }
+
+    rulesNew = false;
+
+    return;
 }
 
 function updatePersonas(activePersonas)
@@ -198,7 +230,7 @@ function updatePersonas(activePersonas)
     componentHandler.upgradeDom();
 
     // tick all checkboxes
-    for(let i=0;i<allPersonas.length;i++)
+    for(let i=0;i<activePersonas.length;i++)
     {
         if(activePersonas[i].active)
         {
@@ -230,20 +262,27 @@ function collectDataOnSave()
     let pin4 = document.getElementById("pin4");
     savePin += pin4.value;
 
+    // grabbing inputs from rules
+    let saveDictionary = []
+    let m=0
+    while(document.getElementById(`block_${m}`)!=null)
+    {
+        saveDictionary.push({blockWord: document.getElementById(`block_${m}`).value,
+                             subWord: document.getElementById(`sub_${m}`).value
+                            });
+        m++;
+    }
+
     // send collated data to storage
     chrome.storage.local.set({
-        extensionActive: popupData.extensionActive,
-        dictionary: popupData.dictionary,
+        dictionary: saveDictionary,
         personaDictionary: [],
         activePersonas: saveActivePersonas,
         pin: savePin,
-        parentalActive: true,
+        parentalActive: false,
         bolding: document.getElementById("boldActive").parentElement.className.includes("is-checked")
     });
 }
-
-let focalPoint = {area: "",
-                  index: null};
 
 function popupUpdate(data)
 {
@@ -600,8 +639,10 @@ function popupUpdate(data)
         }
 
         // updating rules and personas if those tabs are present
+        rulesNew = true;
+        personaNew = true;
         updatePersonas(data.activePersonas);
-        updateRules(data.dictionary);
+        updateRules(data.dictionary,clicked);
 
         // inserting save changes button
         let saveContainer = document.getElementById("save-container");
@@ -627,36 +668,71 @@ function popupUpdate(data)
 document.body.addEventListener("click",
     (event) =>
     {
-        let clicked = event.target
+        clicked = event.target
+        console.log(event.target.id);
+        /*
         chrome.storage.local.get(["dictionary", "activePersonas"], (res) => {
             let dictionary = res.dictionary;
             let activePersonas = res.activePersonas;
-            // setting focus onto a rule
-            if(clicked.id.includes("rule")
-                ||clicked.id.includes("sub")
-                ||clicked.id.includes("block"))
-            {
-                focalPoint.area = "rule";
-                focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
-                updateRules(dictionary);
-            }
+        */
+        // setting focus onto a rule
+        if((clicked.id.includes("rule")
+           ||clicked.id.includes("sub")
+           ||clicked.id.includes("block"))) //&& focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length)) // don't trigger if double click
+        {
+            focalPoint.area = "rule";
+            focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+            updateRules(popupData.dictionary,clicked);
+        }
 
-            // setting focus onto a persona
-            else if(clicked.id.includes("list-checkbox")
-                ||clicked.id.includes("persona"))
-            {
-                focalPoint.area = "persona";
-                focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
-                updatePersonas(activePersonas);
-            }
+        // setting focus onto a persona
+        else if((clicked.id.includes("list-checkbox")
+           ||clicked.id.includes("persona"))) // && focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length))
+        {
+            focalPoint.area = "persona";
+            focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+            updatePersonas(popupData.activePersonas); // add event tag to implement focus here
+        }
 
-            else if(!focalPoint.area == "")// defocus
-            {
-                focalPoint.area = "";
-                focalPoint.index = null;
-                updateRules(dictionary);
-                updatePersonas(activePersonas);
-            }
-        });
+        else if(!focalPoint.area!="") // defocus
+        {
+            focalPoint.area = "";
+            focalPoint.index = null;
+            updateRules(popupData.dictionary,clicked);
+            updatePersonas(popupData.activePersonas);
+        }
+
+        return;
     }
 )
+
+
+function onLoad(){
+    // pull data from storage upon injection
+    chrome.storage.local.get(["extensionActive","dictionary","personaDictionary","activePersonas","pin","parentalActive","bolding"], (res) => {
+        let data = {
+            extensionActive: res.extensionActive,
+            dictionary: res.dictionary,
+            personaDictionary: res.personaDictionary,
+            activePersonas: res.activePersonas,
+            pin: res.pin,
+            parentalActive: res.parentalActive,
+            bolding: res.bolding
+        }
+        console.log(data);
+        popupData = data;
+        // scan to check which active personas are used
+        let activePersonas = data.activePersonas;
+        for(let i=0; i<activePersonas.length; i++){
+            if(activePersonas[i].active){
+                for(let j=0; j<allPersonas[i].dictionary.length; j++){
+                    data.personaDictionary.push(allPersonas[i].dictionary[j]);
+                }
+            }
+        }
+        // send call to function to display user info
+        console.log(data);
+        popupUpdate(data);
+    });
+}
+onLoad();
