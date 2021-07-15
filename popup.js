@@ -24,30 +24,55 @@ let allPersonas = [{name: "placeholder1",
 
 */
 // default data variable to store all the neccessary info that popup requires
-let popupData = {};
+let popupData = {extensionActive: false,
+                dictionary: [{
+                                blockWord: "football",
+                                subWord: "cog",
+                            },
+                            {
+                                blockWord: "what",
+                                subWord: "shit",
+                            }],
+                personaDictionary: [],
+                activePersonas: [{
+                                    name: "placeholder1",
+                                    active: false
+                                },
+                                {
+                                    name: "placeholder2",
+                                    active: true
+                                }],
+                pin: "0000",
+                parentalActive: false,
+                bolding: false,};
 
-function onLoad(){
-    // pull data from storage upon injection
-    chrome.storage.local.get('data', data => {
-        popupData = data.data;
-        console.log(popupData);
-        // scan to check which active personas are used
-        let activePersonas = popupData.activePersonas;
-        for(let i=0; i<activePersonas.length; i++){
-            if(activePersonas[i].active){
-                for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                    popupData.personaDictionary.push(allPersonas[i].dictionary[j]);
-                }
-            }
-        }
+let focalPoint = {area: "",
+                  index: null};
 
-        // send call to function to display user info
-        popupUpdate(popupData);
+popupUpdate(popupData) 
 
-    });
-}
+// function onLoad(){
+//     // pull data from storage upon injection
+//     chrome.storage.local.get('data', data => {
+//         popupData = data.data;
+//         console.log(popupData);
+//         // scan to check which active personas are used
+//         let activePersonas = popupData.activePersonas;
+//         for(let i=0; i<activePersonas.length; i++){
+//             if(activePersonas[i].active){
+//                 for(let j=0; j<allPersonas[i].dictionary.length; j++){
+//                     popupData.personaDictionary.push(allPersonas[i].dictionary[j]);
+//                 }
+//             }
+//         }
 
-onLoad();
+//         // send call to function to display user info
+//         popupUpdate(popupData);
+
+//     });
+// }
+
+// onLoad();
 
 
 /*
@@ -68,41 +93,60 @@ function updateRules(dictionary)
     // adding rules from dictionary onto popup
     for(let i=0;i<dictionary.length;i++)
     {
-        inner +=`<div class="card-slot" style="justify-content: space-evenly;">
-                    Change&#8287&#8287
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="block_${i}">
-                        <label class="mdl-textfield__label" for="block_${i}"></label>
+        // adds big slot boi with delete rule button if in focus
+        if(focalPoint.area=="rule"&&focalPoint.index==i)
+        {
+            inner+=`<div class="slot-joiner">
+                    <div class="card-slot" style="justify-content: space-evenly;">
+                        Change&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="block_${i}">
+                            <label class="mdl-textfield__label" for="block_${i}"></label>
+                        </div>
+                        &#8287to&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="sub_${i}">
+                            <label class="mdl-textfield__label" for="sub_${i}"></label>
+                        </div>
                     </div>
-                    &#8287&#8287to&#8287&#8287 
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sub_${i}">
-                        <label class="mdl-textfield__label" for="sub_${i}"></label>
+                    <div class="card-slot" style="justify-content: center;">
+                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id = "deleteRule-${i}">
+                            Delete Rule
+                        </button>
                     </div>
-                 </div>`
+                </div>`;
+        }
+        else
+        {
+            inner +=`<div class="card-slot" id="rule_${i}" style="justify-content: space-evenly;">
+                        Change&#8287&#8287
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="block_${i}">
+                            <label class="mdl-textfield__label" for="block_${i}"></label>
+                        </div>
+                        &#8287&#8287to&#8287&#8287 
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" type="text" id="sub_${i}">
+                            <label class="mdl-textfield__label" for="sub_${i}"></label>
+                        </div>
+                    </div>`
+        }
     }
 
     inner+=`<div class="slot-joiner">
-                <div class="card-slot" style="justify-content: space-evenly;">
+                <div class="card-slot" id="add-card-1" style="justify-content: space-evenly;">
                     Change&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="1">
-                        <label class="mdl-textfield__label" for="1"></label>
+                        <input class="mdl-textfield__input" type="text" id="add_block">
+                        <label class="mdl-textfield__label" for="add_block"></label>
                     </div>
                     &#8287to&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="2">
-                        <label class="mdl-textfield__label" for="2"></label>
+                        <input class="mdl-textfield__input" type="text" id="add_sub">
+                        <label class="mdl-textfield__label" for="add_sub"></label>
                     </div>
                 </div>
-                <div class="card-slot">Redaction
-                    <div>
-                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="redactStatus">
-                            <input type="checkbox" id="redactStatus" class="mdl-switch__input">
-                        </label>
-                    </div>
-                </div>
-                <div class="card-slot" style="justify-content: center;">
+                <div class="card-slot" id="add-card-2" style="justify-content: center;">
                     <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" id = "addRule">
                         Add Rule
                     </button>
@@ -134,7 +178,7 @@ function updatePersonas(activePersonas)
     for(let i=0;i<allPersonas.length;i++)
     {
 
-        inner+=`<div class="card-slot">
+        inner+=`<div class="card-slot" id="persona-${i}">
                     ${allPersonas[i].name}
                     <div>
                         <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-${i}">
@@ -161,6 +205,38 @@ function updatePersonas(activePersonas)
 
     return;
 }
+
+function collectDataOnSave()
+{
+    // determining which personas have been ticked
+    let saveActivePersonas = popupData.activePersonas;
+    for(let i=0;i<popupData.activePersonas.length;i++)
+    {
+        saveActivePersonas[i].active = document.getElementById(`list-checkbox-${i}`).parentElement.className.includes("is-checked");
+    }
+
+    // grabbing current pin
+    let savePin = "";
+    let pin1 = document.getElementById("pin1");
+    savePin += pin1.value;
+    let pin2 = document.getElementById("pin2");
+    savePin += pin2.value;
+    let pin3 = document.getElementById("pin3");
+    savePin += pin3.value;
+    let pin4 = document.getElementById("pin4");
+    savePin += pin4.value;
+
+    let saveData = {extensionActive: popupData.extensionActive,
+                    dictionary: popupData.dictionary,
+                    personaDictionary: [],
+                    activePersonas: saveActivePersonas,
+                    pin: savePin,
+                    parentalActive: true,
+                    bolding: document.getElementById("boldActive").parentElement.className.includes("is-checked")};
+
+    console.log(saveData);
+}
+
 
 function popupUpdate(data)
 {
@@ -246,13 +322,13 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
 
-                    // retrieve tabId from storage
-                    chrome.storage.local.get("currentTabId", tabId => {
-                        chrome.tabs.sendMessage(tabId.currentTabId, {
-                            message: "triggerReplace",
-                            payload: false
-                        });
-                    });
+                    // // retrieve tabId from storage
+                    // chrome.storage.local.get("currentTabId", tabId => {
+                    //     chrome.tabs.sendMessage(tabId.currentTabId, {
+                    //         message: "triggerReplace",
+                    //         payload: false
+                    //     });
+                    // });
                 }
             }
         );
@@ -413,7 +489,6 @@ function popupUpdate(data)
                         containerToCollapse.style.overflow="hidden";
                         expandButton4.innerHTML = `<i class="material-icons">add</i>`;  
                     }
-                    console.log("LOADING FINISHED");
                     return;
                 }
             );   
@@ -517,7 +592,60 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         updatePersonas(data.activePersonas);
         updateRules(data.dictionary);
+
+        // inserting save changes button
+        let saveContainer = document.getElementById("save-container");
+        saveContainer.className = "save-container";
+        saveContainer.innerHTML = `<button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
+                                        Save Changes
+                                    </button>`;
+        componentHandler.upgradeDom();
+
+        // add listener to save button
+        document.getElementById("saveChanges").addEventListener("click",
+            ()=>
+            {
+                collectDataOnSave();
+            }
+        )
     }
 
     return;
 }
+
+// click handler function
+document.body.addEventListener("click",
+    (event) =>
+    {
+        let clicked = event.target
+
+        // setting focus onto a rule
+        if(clicked.id.includes("rule")
+           ||clicked.id.includes("sub")
+           ||clicked.id.includes("block"))
+        {
+            focalPoint.area = "rule";
+            focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+            updateRules(popupData.dictionary);
+        }
+
+        // setting focus onto a persona
+        else if(clicked.id.includes("list-checkbox")
+           ||clicked.id.includes("persona"))
+        {
+            focalPoint.area = "persona";
+            focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
+            updatePersonas(popupData.dictionary);
+        }
+
+        else // defocus
+        // if(clicked.id.includes("add") // if click on add box, then defocus
+        //    ||clicked.id.includes("")
+        //   ) 
+        {
+            focalPoint.area = "";
+            focalPoint.index = null;
+            updateRules(popupData.dictionary);
+        }
+    }
+)
