@@ -11,9 +11,7 @@ chrome.storage.local.get('data', data => {
 
 function replaceWords()
 {
-    let bigString = document.body.innerHTML;
-
-    
+    let bigString = document.body.innerHTML;   
 
     // RULES - case insensitive, word detection is a bit shet (words must not have letters either side, but dont necessarily need spaces either side)
     let rules = [{blockWord: "football",

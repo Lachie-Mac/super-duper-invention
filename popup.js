@@ -55,49 +55,6 @@ onLoad();
 
 */
 
-
-
-
-// PLACEHOLDERS
-let replace = ["football", "and"];
-let substitute = ["australian soccer", "test"];
-
-let saveChanges = document.getElementById("saveChanges");
-saveChanges.addEventListener("click", function() {
-    // variable to hold tabId
-    let tabId = 0;
-    // call getInfo function
-    // for now we will use placeholder information
-
-    // replace with let data = popupData
-    let data = {
-        replace: replace,
-        substitute: substitute
-    };
-    console.log("BUTTON WAS CLICKED");
-
-    // send message to background with the pulled data
-    chrome.runtime.sendMessage({
-        message: "updatePopupData",
-        payload: data
-    }, response => {
-        if(response.message === "success"){
-            console.log("DATA RECEIVED BY BACKGROUND");
-            tabId = response.payload;
-            // send message to foreground with pulled data
-            console.log("NEED TO UPDATE TEXT");
-            // not sending to foreground
-            chrome.tabs.sendMessage(tabId, {
-                message: "updateText",
-                payload: data 
-            });
-        }
-    });
-});
-
-
-
-
 // ON PAGELOAD --------------------------
 
 function updateRules(dictionary)
@@ -202,6 +159,13 @@ function updatePersonas(activePersonas)
     }
 
     return;
+}
+
+function collectDataOnSave() 
+{
+    let saveData = {extensionActive: document.getElementById("on-off-switch").parentElement.className.includes("is-checked"),
+                         dictionary: }
+    
 }
 
 function popupUpdate(data)
@@ -554,6 +518,25 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         updatePersonas(data.activePersonas);
         updateRules(data.dictionary);
+
+        // adding save changes button
+        document.body.innerHTML += `<div class="save-container">
+                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
+                                            Save Changes
+                                        </button> 
+                                    </div>`
+
+        // adding listener for save changes button
+        componentHandler.upgradeDom();
+
+        document.getElementById("saveChanges").addEventListener("click",
+            () => {
+                // collect Page Data
+                collectDataOnSave();
+            }
+        )
+        
+
     }
 
     return;
