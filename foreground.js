@@ -1,45 +1,54 @@
 
-function replaceWords()
+function updateWords(revertActive)
 {
-    let bigString = document.body.innerHTML;
-    // RULES - case insensitive, word detection is a bit shet (words must not have letters either side, but dont necessarily need spaces either side)
-    let rules = [{blockWord: "football",
-              subWord: "<b>basketball</b> "},
-              {blockWord: "Football",
-              subWord: "<b>Basketball</b> "},
-              {blockWord: "The",
-              subWord: "<b>THE</b>"},
-              {blockWord: "the",
-              subWord: "<b>THE</b>"}]
-
-    for(let i=0;i<rules.length;i++) // rules loop
+    if(!revertActive)
     {
-        for(let j=0;j<bigString.length;j++) // string loop
+        let bigString = document.body.innerHTML;   
+
+        // RULES - case insensitive, word detection is a bit shet (words must not have letters either side, but dont necessarily need spaces either side)
+        let rules = [{blockWord: "football",
+                subWord: "<b>basketball</b> "},
+                {blockWord: "Football",
+                subWord: "<b>Basketball</b> "},
+                {blockWord: "The",
+                subWord: "<b>THE</b>"},
+                {blockWord: "the",
+                subWord: "<b>THE</b>"}]
+
+        for(let i=0;i<rules.length;i++) // rules loop
         {
-            let tester = bigString.substring(j,j+(rules[i].blockWord.length)); 
-            if(rules[i].blockWord==tester)
+            for(let j=0;j<bigString.length;j++) // string loop
             {
-                for(let k=j+rules[i].blockWord.length;k<bigString.length;k++)
+                let tester = bigString.substring(j,j+(rules[i].blockWord.length)); 
+                if(rules[i].blockWord==tester)
                 {
-                    let testletter = bigString.substring(k,k+1);
-                    if(testletter=="<") // good word
+                    for(let k=j+rules[i].blockWord.length;k<bigString.length;k++)
                     {
-                        let before = bigString.slice(0,j);
-                        let after = bigString.slice(j+rules[i].blockWord.length,bigString.length);
-                        bigString = before + rules[i].subWord + after;
-                        console.log(`Change ${tester}`);
-                        break;
-                    }
-                    else if(bigString.substring(k,k+1)==">")
-                    {
-                        break;
+                        let testletter = bigString.substring(k,k+1);
+                        if(testletter=="<") // good word
+                        {
+                            let before = bigString.slice(0,j);
+                            let after = bigString.slice(j+rules[i].blockWord.length,bigString.length);
+                            bigString = before + rules[i].subWord + after;
+                            console.log(`Change ${tester}`);
+                            break;
+                        }
+                        else if(bigString.substring(k,k+1)==">")
+                        {
+                            break;
+                        }
                     }
                 }
             }
         }
+        console.log("finished all html")
+        document.body.innerHTML = bigString;
     }
-    console.log("finished all html")
-    document.body.innerHTML = bigString;
+
+    else // revert Page to original
+    {
+        
+    }
 }
 
 // pull data from storage upon injection

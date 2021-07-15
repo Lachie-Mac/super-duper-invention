@@ -55,49 +55,6 @@ onLoad();
 
 */
 
-
-
-
-// PLACEHOLDERS
-let replace = ["football", "and"];
-let substitute = ["australian soccer", "test"];
-
-let saveChanges = document.getElementById("saveChanges");
-saveChanges.addEventListener("click", function() {
-    // variable to hold tabId
-    let tabId = 0;
-    // call getInfo function
-    // for now we will use placeholder information
-
-    // replace with let data = popupData
-    let data = {
-        replace: replace,
-        substitute: substitute
-    };
-    console.log("BUTTON WAS CLICKED");
-
-    // send message to background with the pulled data
-    chrome.runtime.sendMessage({
-        message: "updatePopupData",
-        payload: data
-    }, response => {
-        if(response.message === "success"){
-            console.log("DATA RECEIVED BY BACKGROUND");
-            tabId = response.payload;
-            // send message to foreground with pulled data
-            console.log("NEED TO UPDATE TEXT");
-            // not sending to foreground
-            chrome.tabs.sendMessage(tabId, {
-                message: "updateText",
-                payload: data 
-            });
-        }
-    });
-});
-
-
-
-
 // ON PAGELOAD --------------------------
 
 function updateRules(dictionary)
@@ -107,19 +64,19 @@ function updateRules(dictionary)
     let blockInput;
     let subInput;
 
-    // adding rules from dictionary onto page
+    // adding rules from dictionary onto popup
     for(let i=0;i<dictionary.length;i++)
     {
         inner +=`<div class="card-slot" style="justify-content: space-evenly;">
                     Change&#8287&#8287
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="block_${i}">
-                        <label class="mdl-textfield__label" for="block_${i}"></label>
+                        <input class="mdl-textfield__input" type="text" id="block_dic_${i}">
+                        <label class="mdl-textfield__label" for="block_dic_${i}"></label>
                     </div>
                     &#8287&#8287to&#8287&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sub_${i}">
-                        <label class="mdl-textfield__label" for="sub_${i}"></label>
+                        <input class="mdl-textfield__input" type="text" id="sub_dic_${i}">
+                        <label class="mdl-textfield__label" for="sub_dic_${i}"></label>
                     </div>
                  </div>`
     }
@@ -155,7 +112,7 @@ function updateRules(dictionary)
     // refresh MDL
     componentHandler.upgradeDom();
 
-    // add values to word boxes
+    // add values to dictionary rules
     for(let i=0;i<dictionary.length;i++)
     {
         blockInput = document.getElementById(`block_${i}`);
@@ -204,6 +161,15 @@ function updatePersonas(activePersonas)
     return;
 }
 
+function collectDataOnSave() 
+{
+    let saveData = {extensionActive: document.getElementById("on-off-switch").parentElement.className.includes("is-checked"),
+                    dictionary: popupData.dictionary,
+                    personaDictionary:[],
+                    activePersonas: {name: "placeholder1"}}
+    
+}
+
 function popupUpdate(data)
 {
     // inserting layout
@@ -245,7 +211,7 @@ function popupUpdate(data)
         // setting on/off toggle state
         if(data.extensionActive)
         {
-            onOffCheckbox.parentElement.className += " is-checked";
+            onOffCheckbox.value = "on";
             onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
             onOffCheckbox.parentElement.children[2].innerText = "ON";
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
@@ -257,7 +223,7 @@ function popupUpdate(data)
             onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red";
         }
 
-        // adding listener to allow toggles
+        // adding listener to allow toggles LISTENER
         onOffCheckbox.addEventListener("click",
             ()=>{
                 if(onOffCheckbox.parentElement.className.includes("is-checked")) // go to off state
@@ -566,6 +532,25 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         updatePersonas(data.activePersonas);
         updateRules(data.dictionary);
+
+        // adding save changes button
+        document.body.innerHTML += `<div class="save-container">
+                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
+                                            Save Changes
+                                        </button> 
+                                    </div>`
+
+        // adding listener for save changes button
+        componentHandler.upgradeDom();
+
+        document.getElementById("saveChanges").addEventListener("click",
+            () => {
+                // collect Page Data
+                collectDataOnSave();
+            }
+        )
+        
+
     }
 
     return;
