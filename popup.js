@@ -70,13 +70,13 @@ function updateRules(dictionary)
         inner +=`<div class="card-slot" style="justify-content: space-evenly;">
                     Change&#8287&#8287
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="block_dic_${i}">
-                        <label class="mdl-textfield__label" for="block_dic_${i}"></label>
+                        <input class="mdl-textfield__input" type="text" id="block_${i}">
+                        <label class="mdl-textfield__label" for="block_${i}"></label>
                     </div>
                     &#8287&#8287to&#8287&#8287 
                     <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sub_dic_${i}">
-                        <label class="mdl-textfield__label" for="sub_dic_${i}"></label>
+                        <input class="mdl-textfield__input" type="text" id="sub_${i}">
+                        <label class="mdl-textfield__label" for="sub_${i}"></label>
                     </div>
                  </div>`
     }
@@ -163,10 +163,14 @@ function updatePersonas(activePersonas)
 
 function collectDataOnSave() 
 {
-    let saveData = {extensionActive: document.getElementById("on-off-switch").parentElement.className.includes("is-checked"),
+    let saveActivePersonas = popupData.activePersonas;
+    for(let i=0;i<activePersonas.length;i++)
+    { 
+    }
+
+    let saveData = {extensionActive: popupData.extensionActive,
                     dictionary: popupData.dictionary,
-                    personaDictionary:[],
-                    activePersonas: {name: "placeholder1"}}
+                    personaDictionary:[]}
     
 }
 
@@ -548,15 +552,10 @@ function popupUpdate(data)
                 // collect Page Data
                 collectDataOnSave();
             }
-        )
+        );
         
 
     }
 
     return;
-}
-
-function focusRules()
-{
-
 }
