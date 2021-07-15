@@ -185,7 +185,12 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "triggerReplace"){
         let revertActive = request.payload;
         // retrieve data from storage
-        updateWords(revertActive);
+        chrome.storage.local.get("extensionActive", res => {
+            if(res.extensionActive){
+                updateWords(revertActive);
+
+            }
+        });
         
         sendResponse({
             message: "success"
