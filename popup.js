@@ -161,19 +161,6 @@ function updatePersonas(activePersonas)
     return;
 }
 
-function collectDataOnSave() 
-{
-    let saveActivePersonas = popupData.activePersonas;
-    for(let i=0;i<activePersonas.length;i++)
-    { 
-    }
-
-    let saveData = {extensionActive: popupData.extensionActive,
-                    dictionary: popupData.dictionary,
-                    personaDictionary:[]}
-    
-}
-
 function popupUpdate(data)
 {
     // inserting layout
@@ -536,25 +523,6 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         updatePersonas(data.activePersonas);
         updateRules(data.dictionary);
-
-        // adding save changes button
-        document.body.innerHTML += `<div class="save-container">
-                                        <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" style="margin-top:0px" id = "saveChanges">
-                                            Save Changes
-                                        </button> 
-                                    </div>`
-
-        // adding listener for save changes button
-        componentHandler.upgradeDom();
-
-        document.getElementById("saveChanges").addEventListener("click",
-            () => {
-                // collect Page Data
-                collectDataOnSave();
-            }
-        );
-        
-
     }
 
     return;
