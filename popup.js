@@ -30,6 +30,7 @@ function onLoad(){
     // pull data from storage upon injection
     chrome.storage.local.get('data', data => {
         popupData = data.data;
+        console.log(popupData);
         // scan to check which active personas are used
         let activePersonas = popupData.activePersonas;
         for(let i=0; i<activePersonas.length; i++){
@@ -244,19 +245,12 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
-                 
-                    // make toggle status persistent
-                    chrome.storage.local.get("data", data => {
-                        data.data.extensionActive = true;
-                        chrome.storage.local.set({
-                            data: data
-                        });
-                    });
 
                     // retrieve tabId from storage
                     chrome.storage.local.get("currentTabId", tabId => {
                         chrome.tabs.sendMessage(tabId.currentTabId, {
                             message: "triggerReplace",
+                            payload: false
                         });
                     });
                 }

@@ -1,5 +1,5 @@
 
-function updateWords(revertActive)
+function updateWords(data,revertActive)
 {
     if(!revertActive)
     {
@@ -97,10 +97,11 @@ chrome.storage.local.get('data', data => {
 // listener to trigger reload
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "triggerReplace"){
+        let revertActive = request.payload;
         // retrieve data from storage
         chrome.storage.local.get("data", data => {
             // placholder
-            replaceWords(data);
+            updateWords(data,revertActive);
             // replaceWords(data.data);
         });
         
