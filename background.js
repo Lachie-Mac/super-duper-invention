@@ -37,7 +37,7 @@ chrome.runtime.onInstalled.addListener(() => {
             bolding: false,
         },
         currentTabId: "",
-
+        baseHTML: ""
     });
 });
 

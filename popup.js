@@ -253,6 +253,14 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+                 
+                    // make toggle status persistent
+                    chrome.storage.local.get("data", data => {
+                        data.data.extensionActive = true;
+                        chrome.storage.local.set({
+                            data: data
+                        });
+                    });
 
                     // retrieve tabId from storage
                     chrome.storage.local.get("currentTabId", tabId => {
@@ -260,14 +268,6 @@ function popupUpdate(data)
                             message: "triggerReplace",
                         });
                     });
-
-                    /*
-                    GENERAL IDEA
-                    // extract data from storage
-                    chrome.runtime.sendMessage({
-                        message: "displayText"
-                    });
-                    */
                 }
             }
         );
