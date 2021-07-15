@@ -35,7 +35,7 @@ function onLoad(){
         for(let i=0; i<activePersonas.length; i++){
             if(activePersonas[i].active){
                 for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                    popupData.dictionary.push(allPersonas[i].dictionary[j]);
+                    popupData.personaDictionary.push(allPersonas[i].dictionary[j]);
                 }
             }
         }
@@ -230,6 +230,11 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].innerText = "OFF";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: red;";
 
+                    
+                    // send message to foreground
+                    // upon receiving message trigger replaceWords
+
+
                     /*
                     GENERAL IDEA
                     // force the page to reload
@@ -246,6 +251,13 @@ function popupUpdate(data)
                     onOffCheckbox.parentElement.children[2].style.cssText = "text-align: center; font-family:'Poppins',sans-serif; font-size: 10px; background-color: #00e025;";
                     onOffCheckbox.parentElement.children[2].innerText = "ON";
                     onOffCheckbox.parentElement.children[1].style.cssText = "background-color: #00e025;";
+
+                    // retrieve tabId from storage
+                    chrome.storage.local.get("currentTabId", tabId => {
+                        chrome.tabs.sendMessage(tabId, {
+                            message: "triggerReplace"
+                        });
+                    });
 
                     /*
                     GENERAL IDEA

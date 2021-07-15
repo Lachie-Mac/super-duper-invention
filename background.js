@@ -34,16 +34,18 @@ chrome.runtime.onInstalled.addListener(() => {
             pin: "0000",
             parentalActive: false,
             bolding: false,
-        }
+        },
+        currentTabId: "",
+        
     });
 });
 
 
-let currentTab = 0;
-
 // runs whenever the active tab is changed
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    currentTab = tabId;
+    chrome.storage.local.set({
+        currentTabId: tabId
+    });
     if (changeInfo.status === "complete" && /^http/.test(tab.url)) {
         // injects the foreground.js script into the active tab
         chrome.scripting.executeScript({

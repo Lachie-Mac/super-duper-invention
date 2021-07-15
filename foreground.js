@@ -1,13 +1,3 @@
-// pull data from storage upon injection
-let userData = {};
-chrome.storage.local.get('data', data => {
-    // check toggle status
-    let toggleStatus = data.data.extensionActive;
-    if(toggleStatus){
-        // load the text replacement
-        replaceWords(data.data);
-    }
-}); 
 
 function replaceWords()
 {
@@ -53,6 +43,18 @@ function replaceWords()
     document.body.innerHTML = bigString;
 }
 
+// pull data from storage upon injection
+let userData = {};
+chrome.storage.local.get('data', data => {
+    // check toggle status
+    let toggleStatus = data.data.extensionActive;
+    if(toggleStatus){
+        // load the text replacement
+        replaceWords();
+    }
+}); 
+
+
 // // function to replace given texts with substitutes
 // function replaceWords(data){
 //     let words = data.dictionary;
@@ -86,10 +88,14 @@ function replaceWords()
 
 // listener to trigger reload
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if(request.message === "triggerReload"){
-        // force reload
-        window.location.reload();
-
+    if(request.message === "triggerReplace"){
+        // retrieve data from storage
+        chrome.storage.local.get("data", data => {
+            // placholder
+            replaceWords(data);
+            // replaceWords(data.data);
+        });
+        
         sendResponse({
             message: "success"
         });
@@ -98,6 +104,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
 });
 
+/*
 // listener to trigger display replaced text
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if(request.message === "triggerReload"){
@@ -109,3 +116,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
     }
 });
+
+//window.location.reload();
+*/
