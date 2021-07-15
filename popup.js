@@ -4,7 +4,7 @@
 
 */
 
-let clicked;
+let clicked=null;
 
 
 let allPersonas = [{name: "Donald Trump",
@@ -191,7 +191,7 @@ function updateRules(dictionary,clicked)
     }
 
     // focusing on target again
-    if(focalPoint.area!="" && clicked != undefined)
+    if(focalPoint.area=="rule" && clicked != null)
     {
         let target = document.getElementById(`${clicked.id}`);
         target.focus();
@@ -204,24 +204,58 @@ function updateRules(dictionary,clicked)
     return;
 }
 
-function updatePersonas(activePersonas)
+function updatePersonas(activePersonas,clicked)
 {
     let personasDiv = document.getElementById("collapse-2-div");
     let inner = "";
     let checkbox;
 
+    let checkboxArray=[];
+    let c = 0;
+
+    // detecting checked tickboxes and assigning them to an array
+    while(document.getElementById(`list-checkbox-${c}`)!=null)
+    {
+        checkboxArray.push(document.getElementById(`list-checkbox-${c}`).parentElement.className.includes("is-checked"));
+        c++;
+    }
     // generate list then insert
     for(let i=0;i<activePersonas.length;i++)
     {
 
-        inner+=`<div class="card-slot" id="persona-${i}">
+        if(focalPoint.area == "persona" && focalPoint.index == i)
+        {
+            let personaAllRulesString = "";
+            let personaAllRules = allPersonas[i];
+            for(let i=0;i<personaAllRules.dictionary.length;i++)
+            {
+                personaAllRulesString += `- Change ${personaAllRules.dictionary[i].blockWord} to ${personaAllRules.dictionary[i].subWord} <br>`
+            }
+            inner+=`<div class="slot-joiner">
+                        <div class="card-slot">
+                            ${allPersonas[i].name}
+                            <div>
+                                <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-${i}" id="list-checkbox-parent-${i}">
+                                    <input type="checkbox" id="list-checkbox-${i}" class="mdl-checkbox__input"/>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="card-slot" style="font-size: 14px; padding-left: 20px; white-space:normal;">
+                            ${personaAllRulesString}
+                        </div>
+                    </div>`
+        }
+        else
+        {
+            inner+=`<div class="card-slot" id="persona-${i}">
                     ${activePersonas[i].name}
                     <div>
-                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-${i}">
+                        <label class="mdl-checkbox mdl-js-checkbox mdl-js-ripple-effect" for="list-checkbox-${i}" id="list-checkbox-parent-${i}">
                             <input type="checkbox" id="list-checkbox-${i}" class="mdl-checkbox__input"/>
                         </label>
                     </div>
                 </div>`;
+        }
     }
 
     personasDiv.innerHTML = inner;
@@ -230,14 +264,52 @@ function updatePersonas(activePersonas)
     componentHandler.upgradeDom();
 
     // tick all checkboxes
-    for(let i=0;i<activePersonas.length;i++)
+    if(personaNew)
     {
-        if(activePersonas[i].active)
+        for(let i=0;i<activePersonas.length;i++)
         {
-            checkbox = document.getElementById(`list-checkbox-${i}`);
-            checkbox.parentElement.MaterialCheckbox.check();
+            if(activePersonas[i].active)
+            {
+                checkbox = document.getElementById(`list-checkbox-${i}`);
+                checkbox.parentElement.MaterialCheckbox.check();
+            }
         }
     }
+    else // checks based on what was checked before
+    {
+        for(let i=0;i<activePersonas.length;i++)
+        {
+            if(checkboxArray[i])
+            {
+                checkbox = document.getElementById(`list-checkbox-${i}`);
+                checkbox.parentElement.MaterialCheckbox.check();
+            }
+        }
+    }
+
+    // toggling tickbox if required
+    if(clicked!=null)
+    {
+        if(clicked.parentElement!=null)
+        {
+            if(clicked.parentElement.id.includes("list-checkbox"))
+            {
+                let parent = document.getElementById(`${clicked.parentElement.id}`);
+            
+                // toggle checkbox
+                if(checkboxArray[focalPoint.index])
+                {
+                    parent.MaterialCheckbox.uncheck();
+                }
+                else
+                {
+                    parent.MaterialCheckbox.check();
+                }
+            }
+        }
+    }
+
+    personaNew = false;
 
     return;
 }
@@ -641,7 +713,7 @@ function popupUpdate(data)
         // updating rules and personas if those tabs are present
         rulesNew = true;
         personaNew = true;
-        updatePersonas(data.activePersonas);
+        updatePersonas(data.activePersonas,clicked);
         updateRules(data.dictionary,clicked);
 
         // inserting save changes button
@@ -669,7 +741,6 @@ document.body.addEventListener("click",
     (event) =>
     {
         clicked = event.target
-        console.log(event.target.id);
         /*
         chrome.storage.local.get(["dictionary", "activePersonas"], (res) => {
             let dictionary = res.dictionary;
@@ -686,20 +757,30 @@ document.body.addEventListener("click",
         }
 
         // setting focus onto a persona
-        else if((clicked.id.includes("list-checkbox")
-           ||clicked.id.includes("persona"))) // && focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length))
+        else if(clicked.id.includes("persona")) // && focalPoint.index!=clicked.id.substring(clicked.id.length-1,clicked.id.length))
         {
             focalPoint.area = "persona";
             focalPoint.index = clicked.id.substring(clicked.id.length-1,clicked.id.length);
-            updatePersonas(popupData.activePersonas); // add event tag to implement focus here
+            updatePersonas(popupData.activePersonas,clicked); // add event tag to implement focus here
         }
+
+        else if(clicked.parentElement!=null)
+        {
+            if(clicked.parentElement.id.includes("list-checkbox"))
+            {
+                focalPoint.area = "persona";
+                focalPoint.index = clicked.parentElement.id.substring(clicked.parentElement.id.length-1,clicked.parentElement.id.length);
+                updatePersonas(popupData.activePersonas,clicked); // add event tag to implement focus here
+            }
+        }
+
 
         else if(!focalPoint.area!="") // defocus
         {
             focalPoint.area = "";
             focalPoint.index = null;
             updateRules(popupData.dictionary,clicked);
-            updatePersonas(popupData.activePersonas);
+            updatePersonas(popupData.activePersonas,clicked);
         }
 
         return;

@@ -22,13 +22,18 @@ chrome.runtime.onInstalled.addListener(() => {
         }],
         personaDictionary: [],
         activePersonas: [{
-            name: "placeholder1",
+            name: "Donald Trump",
             active: false
         },
         {
-            name: "placeholder2",
+            name: "12-year-old",
+            active: true
+        },
+        {
+            name: "Influencer",
             active: true
         }],
+
         pin: "0000",
         parentalActive: false,
         bolding: false,
