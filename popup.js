@@ -56,7 +56,8 @@ let popupData = {};
 let focalPoint = {area: "",
                   index: null};
 
-let rulesNew = true;
+let maintainStoredRulesInputs = true;
+let maintainAddInputs = true;
 let personaNew = true;
 
 
@@ -79,7 +80,7 @@ function updateRules(dictionary,clicked)
     // storing previous values
     let changedDictionary = [];
     let addRule;
-    if(!rulesNew)
+    if(maintainAddInputs)
     {
         addRule = {blockWord: document.getElementById("add_block").value,
                      subWord: document.getElementById("add_sub").value};
@@ -166,7 +167,7 @@ function updateRules(dictionary,clicked)
     // refresh MDL
     componentHandler.upgradeDom();
 
-    if(rulesNew) // add values to dictionary rules only when on load
+    if(!maintainStoredRulesInputs) // add values to dictionary rules only when on load
     {
         for(let i=0;i<dictionary.length;i++)
         {
@@ -187,7 +188,10 @@ function updateRules(dictionary,clicked)
             subInput = document.getElementById(`sub_${i}`);
             subInput.value = changedDictionary[i].subWord;
         }
+    }
 
+    if(maintainAddInputs)
+    {
         // replacing previous inputs in add box
         document.getElementById("add_block").value=addRule.blockWord;
         document.getElementById("add_sub").value=addRule.subWord;
@@ -196,13 +200,34 @@ function updateRules(dictionary,clicked)
     // focusing on target again
     if(focalPoint.area=="rule" && clicked != null)
     {
-        let target = document.getElementById(`${clicked.id}`);
-        target.focus();
-        target.select();
-        target.selectionStart = target.selectionEnd;
+        if(document.getElementById(`${clicked.id}`)!=null)
+        {
+            let target = document.getElementById(`${clicked.id}`);
+            target.focus();
+            target.select();
+            target.selectionStart = target.selectionEnd;
+        }
+        
     }
 
-    rulesNew = false;
+    maintainStoredRulesInputs = false;
+
+    // event listener for add button
+    document.getElementById("addRule").addEventListener("click",
+        ()=>
+        {
+            let newRule = {blockWord: document.getElementById("add_block").value,
+                           subWord: document.getElementById("add_sub").value};
+
+            // pushing rule to local dictionary
+            popupData.dictionary.push(newRule);
+
+            // update rules with data.dictionary, no clicked event in focus, maintain inputs in dictionary
+            maintainStoredRulesInputs = true;
+            maintainAddInputs = false;
+            updateRules(popupData.dictionary,null);
+        }
+    );
 
     return;
 }
@@ -317,7 +342,7 @@ function updatePersonas(activePersonas,clicked)
     return;
 }
 
-function collectDataOnSave()
+function collectDataOnSave() // only works on unlocked page
 {
     // determining which personas have been ticked
     let saveActivePersonas = popupData.activePersonas;
@@ -617,6 +642,7 @@ function popupUpdate(data)
                 }
             );   
     }
+
     // linking pin inputs, 
     let pin1 = document.getElementById("pin1");
     let pin2 = document.getElementById("pin2");
@@ -691,7 +717,7 @@ function popupUpdate(data)
                 pin4.focus();
                 return;
             }
-        })    
+        })
 
     // if unlocked 
     if(!data.parentalActive)
@@ -714,8 +740,9 @@ function popupUpdate(data)
         }
 
         // updating rules and personas if those tabs are present
-        rulesNew = true;
+        maintainStoredRulesInputs = true;
         personaNew = true;
+        maintainAddInputs = false;
         updatePersonas(data.activePersonas,clicked);
         updateRules(data.dictionary,clicked);
 
@@ -751,6 +778,69 @@ function popupUpdate(data)
                 // load in the new changes
             }
         )
+
+        // add listener to activate pin button
+        document.getElementById("pinActive").addEventListener("click",
+            ()=>
+            {
+                // grabbing current pin
+                let savePin = "";
+                let pin1 = document.getElementById("pin1");
+                savePin += pin1.value;
+                let pin2 = document.getElementById("pin2");
+                savePin += pin2.value;
+                let pin3 = document.getElementById("pin3");
+                savePin += pin3.value;
+                let pin4 = document.getElementById("pin4");
+                savePin += pin4.value;
+
+                // change ParentalActive attribute and pin attribute
+                chrome.storage.local.set({
+                    pin: savePin,
+                    parentalActive: true
+                });
+                
+                onLoad();
+            }
+        )
+
+    }
+    else // if locked, implement pin checking listener
+    {
+        document.body.addEventListener("keyup",
+            ()=>
+            {
+                let inputString = pin1.value + pin2.value + pin3.value + pin4.value;
+                if(inputString.length==4)
+                {
+                    if(inputString===popupData.pin)
+                    {
+                        // update parentalActive to false in storage
+                        chrome.storage.local.set({
+                            parentalActive: false
+                        });
+                        onLoad();
+
+                    }
+                    else
+                    {
+                        // adding red if incorrect pin entered
+                        pin1.style.borderBottomColor="red";
+                        pin2.style.borderBottomColor="red";
+                        pin3.style.borderBottomColor="red";
+                        pin4.style.borderBottomColor="red";
+                    }
+                }
+                else
+                {
+                    pin1.style.borderBottomColor="#3b4fff";
+                    pin2.style.borderBottomColor="#3b4fff";
+                    pin3.style.borderBottomColor="#3b4fff";
+                    pin4.style.borderBottomColor="#3b4fff";
+                }
+                return;
+            }
+        )
     }
 
     return;
@@ -760,12 +850,9 @@ function popupUpdate(data)
 document.body.addEventListener("click",
     (event) =>
     {
-        clicked = event.target
-        /*
-        chrome.storage.local.get(["dictionary", "activePersonas"], (res) => {
-            let dictionary = res.dictionary;
-            let activePersonas = res.activePersonas;
-        */
+        clicked = event.target;
+        console.log(clicked.id);
+
         // setting focus onto a rule
         if((clicked.id.includes("rule")
            ||clicked.id.includes("sub")
@@ -792,8 +879,17 @@ document.body.addEventListener("click",
                 focalPoint.index = clicked.parentElement.id.substring(clicked.parentElement.id.length-1,clicked.parentElement.id.length);
                 updatePersonas(popupData.activePersonas,clicked); // add event tag to implement focus here
             }
-        }
+            else if(clicked.parentElement.id.includes("deleteRule")) // delete listener
+            {
+                index = clicked.parentElement.id.substring(clicked.parentElement.id.length-1,clicked.parentElement.id.length);
+                popupData.dictionary.splice(index,1);
 
+                // update Rules while maintaining data that was in add boxes
+                maintainStoredRulesInputs = false;
+                maintainAddInputs = true;
+                updateRules(popupData.dictionary,null)
+            }
+        }    
 
         else if(!focalPoint.area!="") // defocus
         {
@@ -822,18 +918,11 @@ function onLoad(){
         }
         console.log(data);
         popupData = data;
-        // scan to check which active personas are used
-        let activePersonas = data.activePersonas;
-        for(let i=0; i<activePersonas.length; i++){
-            if(activePersonas[i].active){
-                for(let j=0; j<allPersonas[i].dictionary.length; j++){
-                    data.personaDictionary.push(allPersonas[i].dictionary[j]);
-                }
-            }
-        }
+
         // send call to function to display user info
         console.log(data);
         popupUpdate(data);
+
     });
 }
 onLoad();
