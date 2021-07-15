@@ -11,6 +11,9 @@ let allPersonas = [{name: "Donald Trump",
                     dictionary: [{
                         blockWord: "Donald Trump",
                         subWord: "Toupee wearing Orange Demon"},
+                        {
+                        blockWord: "Donald John Trump",
+                        subWord: "Toupee Wearing Orange Demon"},
                     {
                         blockWord: "fake news",
                         subWord: "news the wrinkly orange sack does not agree with"},
@@ -761,11 +764,7 @@ document.body.addEventListener("click",
     (event) =>
     {
         clicked = event.target
-        /*
-        chrome.storage.local.get(["dictionary", "activePersonas"], (res) => {
-            let dictionary = res.dictionary;
-            let activePersonas = res.activePersonas;
-        */
+
         // setting focus onto a rule
         if((clicked.id.includes("rule")
            ||clicked.id.includes("sub")
