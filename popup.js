@@ -207,7 +207,6 @@ function updateRules(dictionary,clicked)
             let target = document.getElementById(`${clicked.id}`);
             target.focus();
             target.select();
-            target.selectionStart = target.selectionEnd;
         }
         
     }
@@ -733,11 +732,17 @@ function popupUpdate(data)
     {
         if(data.pin.length==4)
         {
+            // refresh pins
+            let pn1 = document.getElementById("pin1");
+            let pn2 = document.getElementById("pin2");
+            let pn3 = document.getElementById("pin3");
+            let pn4 = document.getElementById("pin4");
+
             // show current pin
-            pin1.value = Number(data.pin.substring(0,1));
-            pin2.value = Number(data.pin.substring(1,2));
-            pin3.value = Number(data.pin.substring(2,3));
-            pin4.value = Number(data.pin.substring(3,4));
+            pn1.value = Number(data.pin.substring(0,1));
+            pn2.value = Number(data.pin.substring(1,2));
+            pn3.value = Number(data.pin.substring(2,3));
+            pn4.value = Number(data.pin.substring(3,4));
         }
         
         // bolding status
@@ -797,14 +802,14 @@ function popupUpdate(data)
             {
                 // grabbing current pin
                 let savePin = "";
-                let pin1 = document.getElementById("pin1");
-                savePin += pin1.value;
-                let pin2 = document.getElementById("pin2");
-                savePin += pin2.value;
-                let pin3 = document.getElementById("pin3");
-                savePin += pin3.value;
-                let pin4 = document.getElementById("pin4");
-                savePin += pin4.value;
+                let pinn1 = document.getElementById("pin1");
+                savePin += pinn1.value;
+                let pinn2 = document.getElementById("pin2");
+                savePin += pinn2.value;
+                let pinn3 = document.getElementById("pin3");
+                savePin += pinn3.value;
+                let pinn4 = document.getElementById("pin4");
+                savePin += pinn4.value;
 
                 // change ParentalActive attribute and pin attribute
                 chrome.storage.local.set({
@@ -817,12 +822,16 @@ function popupUpdate(data)
         )
 
     }
-    else // if locked, implement pin checking listener
+    else if(data.parentalActive)// if locked, implement pin checking listener
     {
         document.body.addEventListener("keyup",
             ()=>
             {
-                let inputString = pin1.value + pin2.value + pin3.value + pin4.value;
+                let p1 = document.getElementById("pin1");
+                let p2 = document.getElementById("pin2");
+                let p3 = document.getElementById("pin3");
+                let p4 = document.getElementById("pin4");
+                let inputString = p1.value + p2.value + p3.value + p4.value;
                 if(inputString.length==4)
                 {
                     if(inputString===popupData.pin)
@@ -837,18 +846,18 @@ function popupUpdate(data)
                     else
                     {
                         // adding red if incorrect pin entered
-                        pin1.style.borderBottomColor="red";
-                        pin2.style.borderBottomColor="red";
-                        pin3.style.borderBottomColor="red";
-                        pin4.style.borderBottomColor="red";
+                        p1.style.borderBottomColor="red";
+                        p2.style.borderBottomColor="red";
+                        p3.style.borderBottomColor="red";
+                        p4.style.borderBottomColor="red";
                     }
                 }
                 else
                 {
-                    pin1.style.borderBottomColor="#3b4fff";
-                    pin2.style.borderBottomColor="#3b4fff";
-                    pin3.style.borderBottomColor="#3b4fff";
-                    pin4.style.borderBottomColor="#3b4fff";
+                    p1.style.borderBottomColor="#3b4fff";
+                    p2.style.borderBottomColor="#3b4fff";
+                    p3.style.borderBottomColor="#3b4fff";
+                    p4.style.borderBottomColor="#3b4fff";
                 }
                 return;
             }
