@@ -3,6 +3,9 @@ Authors: Tapiwanashe Kusangaya, Eilish Horsfall, Dylan Liu, Lachlan Macdougall
 For Monash Association of Coding's 2021 Hackathon
 Extension: UNDUCK
 
+DEVPOST SUBMISSION LINK
+https://devpost.com/software/unduck
+
 INSTALLATION INSTRUCTIONS:
 - download all files into a folder in a known location
 - go to chrome://extensions
